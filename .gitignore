@@ -11,3 +11,5 @@ config/
 # pycharm
 /.idea*
 venv/
+*.py[cod]
+__pycache__/
