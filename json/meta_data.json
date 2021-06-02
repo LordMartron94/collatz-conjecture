@@ -1,0 +1,153 @@
+{
+    "Functions":[
+        {
+            "name":"help",
+            "alternative_name":"",
+            "tooltip":"It shows all available commands!",
+            "rights":[
+                "Owner",
+                "Admin",
+                "Moderator",
+                "User"
+            ]
+        },
+        {
+            "name":"exit",
+            "alternative_name":"quit",
+            "tooltip":"It exits the code!",
+            "rights":[
+                "Owner",
+                "Admin",
+                "Moderator",
+                "User"
+            ]
+        },
+        {
+            "name":"delete user",
+            "alternative_name":"",
+            "tooltip":"It deletes another user! ",
+            "rights":[
+                "Owner",
+                "Admin"
+            ]
+        },
+        {
+            "name":"change user type",
+            "alternative_name":"",
+            "tooltip":"It makes sure you can change the type of another user ",
+            "rights":[
+                "Owner",
+                "Admin"
+            ]
+        },
+        {
+            "name":"check user data",
+            "alternative_name":"",
+            "tooltip":"With this command you can see all the corresponding data to the user(s)",
+            "rights":[
+                "Owner",
+                "Admin",
+                "Moderator"
+            ]
+        }
+    ],
+    "UserTypes":[
+        {
+            "TypeName":"Owner",
+            "EditableBy":[
+
+            ],
+            "DeletableBy":[
+
+            ],
+            "Changeable By To":[
+                {
+                   "Owner": ["None"],
+                    "Admin": ["None"],
+                    "Moderator": ["None"],
+                    "User": ["None"]
+                }
+            ]
+        },
+        {
+            "TypeName":"Admin",
+            "EditableBy":[
+                "Owner"
+            ],
+            "DeletableBy":[
+                "Owner"
+            ],
+            "Changeable By To":[{
+                "Owner":[
+                    "Owner",
+                    "Moderator",
+                    "User"
+                ],
+                "Admin":[
+                    "None"
+                ],
+                "Moderator":[
+                    "None"
+                ],
+                "User":[
+                    "None"
+                ]
+            }]
+        },
+        {
+            "TypeName":"Moderator",
+            "EditableBy":[
+                "Owner",
+                "Admin"
+            ],
+            "DeletableBy":[
+                "Owner",
+                "Admin"
+            ],
+            "Changeable By To":[{
+                "Owner":[
+                    "Owner",
+                    "Admin",
+                    "User"
+                ],
+                "Admin":[
+                    "User"
+                ],
+                "Moderator":[
+                    "None"
+                ],
+                "User":[
+                    "None"
+                ]
+            }]
+        },
+        {
+            "TypeName":"User",
+            "EditableBy":[
+                "Owner",
+                "Admin",
+                "Moderator"
+            ],
+            "DeletableBy":[
+                "Owner",
+                "Admin"
+            ],
+            "Changeable By To":[{
+                "Owner":[
+                    "Owner",
+                    "Admin",
+                    "Moderator"
+                ],
+                "Admin":[
+                    "Moderator"
+                ],
+                "Moderator":[
+                    "None"
+                ],
+                "User":[
+                    "None"
+                ]
+            }]
+        }
+    ]
+}

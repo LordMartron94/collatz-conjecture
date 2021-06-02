@@ -1,0 +1,5 @@
+Inloggen/registreren
+Commando opgeven (functies opvragen) (gebruiker-rechten wijzigen/type etcetera)
+Collatz Conjecture oplossen (eventueel andere nieuwe functies later)
+
+Later Collatz Conjecture oplossen via database (reeks getallen opslaan tijdelijk, als getal overeenkomt met aanname in de main db)
