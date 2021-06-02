@@ -29,7 +29,7 @@ class AuthenticationForm:
         username = input("What is your username? ")
         password = input("What is your password? ")
 
-        user = self.user_repo.find_entity_by_username(username)
+        user = self.user_repo.get_entity_by_username(username)
 
         if not user or not self.validate_password(user, password):
             print('Incorrect user or password! Try again!')

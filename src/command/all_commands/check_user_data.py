@@ -33,7 +33,7 @@ class CheckUserData:
         return correct
 
     def retrieve_user_id(self, username):
-        _entity = UserRepository(self.database).find_entity_by_username(username)
+        _entity = UserRepository(self.database).get_entity_by_username(username)
         _id = _entity.user_id
         return _id
 

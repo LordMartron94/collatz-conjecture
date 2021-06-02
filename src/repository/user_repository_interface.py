@@ -1,21 +1,31 @@
 from src.entity.user import User
-from src.storage.database import Database
 
 
 class UserRepositoryReadInterface:
 
-    def find_all(self) -> list:
+    def get_all_users(self) -> list:
         pass
 
-    def find_by_id(self, user_id: int) -> User:
+    def get_data_by_id(self, user_id: int) -> User:
         pass
 
-    def find_entity_by_username(self, username: str) -> User:
+    def get_entity_by_username(self, username: str) -> User:
         pass
+
 
 class UserRepositoryWriteInterface:
 
-    def save(self):
+    def delete(self, user: User):
+        pass
+
+    def update(self, user: User):
+        pass
+
+    def create(self, username: str, password: str, role: str) -> User:
+        pass
+
+    @staticmethod
+    def create_user_entity(row: list) -> User:
         pass
 
 

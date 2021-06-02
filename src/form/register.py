@@ -18,67 +18,65 @@ class Register:
         self.hasher = hasher
         self.json_directory = 'json'
 
-    def ask_username(self):
-        username = input("What will your username be? ")
-        return username
+    def get_user_id(self, _username):
+        entity = self.user_repo.get_entity_by_username(_username)
+        return entity.user_id
 
-    def ask_password(self):
-        password = input("What will your password be? ")
-        return password
-
-    def ask_first_name(self):
-        first_name = input("What is your first name? ")
-        return first_name
-
-    def ask_last_name(self):
-        last_name = input("What is your last name? ")
-        return last_name
-
-    def ask_year(self):
-        year = int(input("What is the year you were born? (YYYY) "))
-        return year
-
-    def ask_month(self):
-        print("NO ABBREVIATIONS")
-        month_ask = input("What is the month you were born? ")
+    def get_data_form(self):
         months = storage(self.json_directory).read_json_file_table('months.json', 'Months')
-        for month in months:
-            if month["Name"].lower() == month_ask.lower():
-                return month["Id"]
 
-    def ask_day(self):
-        day = int(input("What is the day you were born? (DD) "))
-        return day
+        username = input("What will your username be? ")
 
-    def calculate_birthday(self):
-        birthday = date(self.ask_year(), self.ask_month(), self.ask_day())
-        return birthday
+        def username_validator():
+            if self.get_user_id(username):
+                print("This user already exists! Choose a different username!")
+                return True
+            if not self.get_user_id(username):
+                return False
 
-    def check_if_username_already_exists(self, username):
-        if self.user_repo.find_user_id_by_username(username):
-            print("This user already exists! Choose a different username!")
-            return True
-        if not self.user_repo.find_user_id_by_username(username):
-            return False
-
-    @staticmethod
-    def check_gender():
-        gender = input("What is your gender? a) Male b) Female c) Don't want to tell ")
-        if gender == 'a':
-            return 'Male'
-        elif gender == 'b':
-            return 'Female'
-        elif gender == 'c':
-            return 'Don\'t want to tell'
+        if username_validator():
+            self.get_data_form()
         else:
-            print('This is not a valid gender! Try again!')
-            Register.check_gender()
+            pass
 
-    def calculate_user_age(self, birthday):
-        time_difference = date.today() - birthday
-        age = int(round(time_difference.days / 365))
-        return age
+        password = input("What will your password be? ")
+        first_name = input("What is your first name? ")
+        last_name = input("What is your last name? ")
+        year = int(input("What is the year you were born? (YYYY) "))
 
+        def ask_month():
+            print("NO ABBREVIATIONS")
+            month_ask = input("What is the month you were born? ")
+            for month in months:
+                if month["Name"].lower() == month_ask.lower():
+                    return month["Id"]
+
+        month = ask_month()
+        day = int(input("What is the day you were born? (DD) "))
+
+        birthday = date(year, month, day)
+
+        def check_gender():
+            gender = input("What is your gender? a) Male b) Female c) Don't want to tell ")
+            if gender == 'a':
+                return 'Male'
+            elif gender == 'b':
+                return 'Female'
+            elif gender == 'c':
+                return 'Don\'t want to tell'
+            else:
+                print('This is not a valid gender! Try again!')
+                return False
+
+        if not check_gender():
+            check_gender()
+        else:
+            gender = check_gender()
+
+        return [username, password, first_name, last_name, birthday, gender]
+
+
+    # todo: use the form above
     def create_user(self, username, password):
         user = [(str(username), str(password), 'User')]
         for user in user:
@@ -92,7 +90,7 @@ class Register:
         user_meta_data = (str(first_name), str(last_name), birthday,
                           str(Register.check_gender()))
 
-        _id = self.user_repo.find_user_id_by_username(username)
+        _id = self.get_user_id(username)
 
         # print("PERSONAL DATA CALLED")
         if not self.meta_data_repo.find_data_id_by_id(_id):
@@ -107,7 +105,7 @@ class Register:
     def create_user_flag_data(self, username):
         flag_data = (False, None, None, None, False, None, None)
 
-        _id = self.user_repo.find_user_id_by_username(username)
+        _id = self.get_user_id(username)
 
         if not self.user_flag_data_repo.find_data_id_by_id(_id):
             self.user_flag_data_repo.create(
@@ -125,7 +123,7 @@ class Register:
 
         if not self.check_if_username_already_exists(username):
             password = self.ask_password()
-            birthday = self.calculate_birthday()
+            birthday = self.make_birthday()
             first_name = self.ask_first_name()
             last_name = self.ask_last_name()
 

@@ -1,7 +1,6 @@
 import time
 
 from src.command.function_checker import FunctionChecker
-from src.logic.age_updater import AgeUpdater
 
 
 class Console:

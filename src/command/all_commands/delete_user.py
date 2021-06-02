@@ -23,7 +23,7 @@ class DeleteUser:
         self.logged_in_user = logged_in_user
 
     def delete_user(self, user_to_delete_name):
-        user_to_delete = UserRepo(self.database).find_entity_by_username(user_to_delete_name)
+        user_to_delete = UserRepo(self.database).get_entity_by_username(user_to_delete_name)
 
         MetaDataRepo(self.database).delete(user_to_delete)
         FlagDataRepo(self.database).delete_by_user_id(user_to_delete)
@@ -42,7 +42,7 @@ class DeleteUser:
 
     def check_if_allowed_to_delete(self, user_to_delete):
         # print("Check if allowed called!")
-        check_user_to_delete_name = UserRepo(self.database).find_entity_by_username(user_to_delete).username
+        check_user_to_delete_name = UserRepo(self.database).get_entity_by_username(user_to_delete).username
         if check_user_to_delete_name == self.logged_in_user:
             UserRepo(self.database).delete(user_to_delete)
             print("Successfully deleted user %s" % user_to_delete)

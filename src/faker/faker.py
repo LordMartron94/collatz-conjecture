@@ -27,7 +27,7 @@ class Faker:
 
     def create_users(self):
         for user in users:
-            if not self.user_repo.find_entity_by_username(user[0]):
+            if not self.user_repo.get_entity_by_username(user[0]):
                 self.user_repo.create(
                     user[0],  # username
                     self.hasher.hash(user[1]),  # password

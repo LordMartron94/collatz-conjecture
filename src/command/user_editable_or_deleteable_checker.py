@@ -19,11 +19,11 @@ class Checker:
 
     def get_current_user_type(self):
         current_user_type = user_repository.UserRepository(self.database).\
-            find_entity_by_username(self.logged_in_user.username).role
+            get_entity_by_username(self.logged_in_user.username).role
         return current_user_type
 
     def get_user_type(self, user):
-        user_type = user_repository.UserRepository(self.database).find_entity_by_username(user).role
+        user_type = user_repository.UserRepository(self.database).get_entity_by_username(user).role
         return user_type
 
     def find_all_changeable_by_user_type(self, user_to_change_type):
