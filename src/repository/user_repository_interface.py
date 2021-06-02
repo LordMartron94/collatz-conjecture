@@ -13,7 +13,6 @@ class UserRepositoryReadInterface:
     def find_entity_by_username(self, username: str) -> User:
         pass
 
-
 class UserRepositoryWriteInterface:
 
     def save(self):
