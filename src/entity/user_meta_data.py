@@ -8,3 +8,8 @@ class UserMetaData:
         self.last_name = last_name
         self.birthday = birthday
         self.gender = gender
+
+    def get_age(self, current_date: date):
+        # self.birthday
+        # TODO calculate age
+        return 20

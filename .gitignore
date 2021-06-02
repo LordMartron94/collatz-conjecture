@@ -1,0 +1,13 @@
+# OS
+.DS_Stor*
+._*
+.env
+.Trashes
+Icon
+
+#project
+config/
+
+# pycharm
+/.idea*
+venv/

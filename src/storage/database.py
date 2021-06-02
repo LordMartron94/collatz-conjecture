@@ -22,9 +22,9 @@ class Database:
         result = 0
         query = """
         SELECT * FROM information_schema.tables
-        WHERE table_schema = 'kop_db'
+        WHERE table_schema = '%s'
             AND table_name = '%s'
-        LIMIT 1;""" % table_name
+        LIMIT 1;""" % (self.db_name, table_name)
         old_result = self.read_query(query)
         if not old_result:
             # print("Result = []")

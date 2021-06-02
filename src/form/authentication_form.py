@@ -1,4 +1,5 @@
 from src.repository.user_repository import UserRepository
+from src.repository.user_repository_interface import UserRepositoryReadInterface
 from src.repository.user_meta_data_repository import UserMetaDataRepository
 from src.repository.user_flag_data_repository import UserFlagDataRepository
 from src.entity.user import User
@@ -12,7 +13,7 @@ date = datetime.date
 
 class AuthenticationForm:
 
-    def __init__(self, user_repo: UserRepository, meta_data_repo: UserMetaDataRepository,
+    def __init__(self, user_repo: UserRepositoryReadInterface, meta_data_repo: UserMetaDataRepository,
                  user_flag_data_repo: UserFlagDataRepository, hasher: HashPassword):
         self.user_repo = user_repo
         self.hasher = hasher

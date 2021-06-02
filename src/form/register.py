@@ -128,6 +128,7 @@ class Register:
             birthday = self.calculate_birthday()
             first_name = self.ask_first_name()
             last_name = self.ask_last_name()
+
             self.create_user(username, password)
             self.create_personal_data(birthday, first_name, last_name, username)
             self.create_user_flag_data(username)

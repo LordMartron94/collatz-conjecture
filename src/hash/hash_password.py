@@ -4,8 +4,8 @@ from config.config import Config
 
 class HashPassword:
 
-    def __init__(self, config: Config):
-        self.salt = config.get_data()['AUTH_SALT']
+    def __init__(self, salt: str):
+        self.salt = salt
 
     def hash(self, password) -> str:
         password += self.salt

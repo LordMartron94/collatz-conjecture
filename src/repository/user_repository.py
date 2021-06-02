@@ -1,8 +1,9 @@
 from src.entity.user import User
 from src.storage.database import Database
+from src.repository.user_repository_interface import UserRepositoryReadInterface, UserRepositoryWriteInterface
 
 
-class UserRepository:
+class UserRepository(UserRepositoryReadInterface, UserRepositoryWriteInterface):
 
     def __init__(self, database: Database):
         self.database = database
