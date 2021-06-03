@@ -61,7 +61,7 @@ class Register:
                 flag_data[3],  # kick reason
                 flag_data[4],  # is banned
                 flag_data[5],  # ban date
-                flag_data[6]  # ban reason
+                flag_data[6]   # ban reason
             )
 
     def run(self):

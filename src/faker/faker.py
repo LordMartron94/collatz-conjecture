@@ -6,11 +6,9 @@ from datetime import date, timedelta
 
 users = [
     # username, password, type
-    ('tobias', 'tobias', 'Admin'),
     ('bernie', 'bernie', 'User'),
     ('ollie', 'ollie', 'User'),
     ('charlie', 'charlie', 'User'),
-    ('Martron', '0000', 'Owner'),
     ('test_kicked', 'test_kicked', 'User'),
     ('test_banned', 'test_banned', 'User')
 ]
@@ -40,11 +38,9 @@ class Faker:
         user_meta_data = [
             # each row represents the same row from users (see above)
             # first_name, last_name, age, birthday, gender
-            ('Tobias', 'Schutter', date_birthday, 'Male'),
             ('Bernie', 'Schutter', date_birthday, 'Female'),
             ('Ollie', 'Schutter', date_birthday, 'Female'),
             ('Charlie', 'Schutter', date_birthday, 'Female'),
-            ('Martron', 'Arada', date_birthday, 'Male'),
             ('Test', 'Kicked', date_birthday, 'Male'),
             ('Test', 'Banned', date_birthday, 'Male')
         ]
@@ -64,8 +60,6 @@ class Faker:
         remove_kick_date = date_kicked + timedelta(days=+30)
         date_banned = date.today() + timedelta(days=7)
         user_flag_data = [
-            (False, None, None, None, False, None, None),
-            (False, None, None, None, False, None, None),
             (False, None, None, None, False, None, None),
             (False, None, None, None, False, None, None),
             (False, None, None, None, False, None, None),

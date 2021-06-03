@@ -2,6 +2,14 @@ from src.entity.user import User
 from src.storage.database import Database
 from src.interfaces.user_repository_interface import UserRepositoryReadInterface, UserRepositoryWriteInterface
 
+from src.repository.user_flag_data_repository import UserFlagDataRepository
+
+from datetime import datetime
+
+date = datetime.date
+
+flag_data_repo = UserFlagDataRepository
+
 
 class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface):
 
@@ -17,7 +25,7 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
 
         users = []
         for data in results:
-            users.append(self.create_user_entity(data))
+            users.append(self._create_user_entity(data))
 
         return users
 
@@ -31,7 +39,7 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
         if not result:
             return None
 
-        return self.create_user_entity(result[0])
+        return self._create_user_entity(result[0])
 
     def get_entity_by_username(self, username: str) -> User:
         query = """
@@ -43,7 +51,7 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
         if not result:
             return None
 
-        return self.create_user_entity(result[0])
+        return self._create_user_entity(result[0])
 
     def get_user_id_by_username(self, username: str):
         query = """
@@ -56,6 +64,37 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
             return None
 
         return result
+
+    def _get_user_flag_data(self, user: User):
+        return flag_data_repo(self.database).find_entity_by_id(user.user_id)
+
+    def get_is_user_kicked(self, user: User):
+        user_flag_data = self._get_user_flag_data(user)
+        return user_flag_data.isKicked
+
+    def get_user_kick_date(self, user: User):
+        user_flag_data = self._get_user_flag_data(user)
+        return user_flag_data.kick_date
+
+    def get_user_kick_reason(self, user: User):
+        user_flag_data = self._get_user_flag_data(user)
+        return user_flag_data.kick_reason
+
+    def get_user_kick_removal_date(self, user: User):
+        user_flag_data = self._get_user_flag_data(user)
+        return user_flag_data.remove_kick_date
+
+    def get_is_user_banned(self, user: User):
+        user_flag_data = self._get_user_flag_data(user)
+        return user_flag_data.isBanned
+
+    def get_user_ban_date(self, user: User):
+        user_flag_data = self._get_user_flag_data(user)
+        return user_flag_data.ban_date
+
+    def get_user_ban_reason(self, user: User):
+        user_flag_data = self._get_user_flag_data(user)
+        return user_flag_data.ban_reason
 
     def delete(self, user: User):
         query = """
@@ -90,6 +129,41 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
         return self.get_data_by_id(user_id)
 
     @staticmethod
-    def create_user_entity(row: list) -> User:
+    def _create_user_entity(row: list) -> User:
         # print(row)
         return User(row[0], row[1], row[2], row[3])
+
+    def set_is_user_kicked(self, user: User, new_value: [bool, None]):
+        user_flag_data = self._get_user_flag_data(user)
+        user_flag_data.isKicked = new_value
+        flag_data_repo(self.database).update(user_flag_data)
+
+    def set_user_kick_date(self, user: User, new_value: [date, None]):
+        user_flag_data = self._get_user_flag_data(user)
+        user_flag_data.kick_date = new_value
+        flag_data_repo(self.database).update(user_flag_data)
+
+    def set_user_kick_reason(self, user: User, new_value: [str, None]):
+        user_flag_data = self._get_user_flag_data(user)
+        user_flag_data.kick_reason = new_value
+        flag_data_repo(self.database).update(user_flag_data)
+
+    def set_user_kick_removal_date(self, user: User, new_value: [date, None]):
+        user_flag_data = self._get_user_flag_data(user)
+        user_flag_data.remove_kick_date = new_value
+        flag_data_repo(self.database).update(user_flag_data)
+
+    def set_is_user_banned(self, user: User, new_value: [bool, None]):
+        user_flag_data = self._get_user_flag_data(user)
+        user_flag_data.isBanned = new_value
+        flag_data_repo(self.database).update(user_flag_data)
+
+    def set_user_ban_date(self, user: User, new_value: [date, None]):
+        user_flag_data = self._get_user_flag_data(user)
+        user_flag_data.ban_date = new_value
+        flag_data_repo(self.database).update(user_flag_data)
+
+    def set_user_ban_reason(self, user: User, new_value: [str, None]):
+        user_flag_data = self._get_user_flag_data(user)
+        user_flag_data.ban_reason = new_value
+        flag_data_repo(self.database).update(user_flag_data)

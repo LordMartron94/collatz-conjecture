@@ -18,7 +18,7 @@ class UserFlagDataRepository:
 
         user_flag_data = []
         for data in results:
-            user_flag_data.append(self.create_meta_data(data))
+            user_flag_data.append(self._create_meta_data(data))
 
         return user_flag_data
 
@@ -32,7 +32,7 @@ class UserFlagDataRepository:
         if not result:
             return None
 
-        return self.create_meta_data(result[0])
+        return self._create_meta_data(result[0])
 
     def find_data_id_by_id(self, user_id: int):
         query = """
@@ -58,9 +58,9 @@ class UserFlagDataRepository:
     def update(self, user_flag_data: UserFlagData):
         sql = """
             UPDATE user_flag_data
-            SET isKicked=%s, kick_date=%s, remove_kick_date=%s, kick_reason='%s', isBanned=%s, ban_date=%s,
+            SET isKicked=%s, kick_date=%s, remove_kick_date=%s, kick_reason=%s, isBanned=%s, ban_date=%s,
              ban_reason=%s
-            WHERE userId = %i;
+            WHERE userId = %s;
        """
         args = (user_flag_data.isKicked, user_flag_data.kick_date, user_flag_data.remove_kick_date,
                 user_flag_data.kick_reason, user_flag_data.isBanned, user_flag_data.ban_date,
@@ -69,7 +69,8 @@ class UserFlagDataRepository:
         self.database.query(sql, args)
 
     def create(self, isKicked: bool, kick_date: [date, None], remove_kick_date: [date, None],
-                 kick_reason: [str, None], isBanned: bool, ban_date: [date, None], ban_reason: [str, None]) -> UserFlagData:
+                 kick_reason: [str, None], isBanned: bool, ban_date: [date, None], ban_reason: [str, None])\
+            -> UserFlagData:
 
         query = """
             INSERT INTO user_flag_data (isKicked, kick_date, remove_kick_date, kick_reason, 
@@ -84,6 +85,6 @@ class UserFlagDataRepository:
         return self.find_entity_by_id(user_meta_data_id)
 
     @staticmethod
-    def create_meta_data(row: list) -> UserFlagData:
+    def _create_meta_data(row: list) -> UserFlagData:
         # print(row)
         return UserFlagData(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])

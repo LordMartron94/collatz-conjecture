@@ -39,9 +39,9 @@ user_repo = UserRepository(database)
 password_hasher = HashPassword(Config.get_data()['AUTH_SALT'])
 
 # Create fake users
-# Faker(user_repo, user_meta_data_repo, user_flag_data_repo, password_hasher).create_users()
-# Faker(user_repo, user_meta_data_repo, user_flag_data_repo, password_hasher).create_personal_data()
-# Faker(user_repo, user_meta_data_repo, user_flag_data_repo, password_hasher).create_user_flag_data()
+Faker(user_repo, user_meta_data_repo, user_flag_data_repo, password_hasher).create_users()
+Faker(user_repo, user_meta_data_repo, user_flag_data_repo, password_hasher).create_personal_data()
+Faker(user_repo, user_meta_data_repo, user_flag_data_repo, password_hasher).create_user_flag_data()
 
 
 def login():
