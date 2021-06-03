@@ -22,10 +22,6 @@ class Checker:
             get_entity_by_username(self.logged_in_user.username).role
         return current_user_type
 
-    def get_user_type(self, user):
-        user_type = user_repository.UserRepository(self.database).get_entity_by_username(user).role
-        return user_type
-
     def find_all_changeable_by_user_type(self, user_to_change_type):
         data = self.data
         for Usertype in data:
@@ -35,10 +31,10 @@ class Checker:
                 return Usertype['Changeable By To']
         return "Error-message: Usertype not found!"
 
-    def check_changeable_by_user_type(self, user_to_change, type_to_change_to):
+    def check_changeable_by_user_type(self, user_to_change: User, type_to_change_to):
         user_logged_in_type = self.get_current_user_type()
         # print("The user logged in type is: %s" % user_logged_in_type)
-        user_to_change_type = self.get_user_type(user_to_change)
+        user_to_change_type = user_to_change.role
         # print("The user to change type is: %s" % user_to_change_type)
         change_able_list = self.find_all_changeable_by_user_type(user_to_change_type)
         # print("The changeable list is: %s" % change_able_list)
@@ -56,7 +52,7 @@ class Checker:
                         if type_to_change_to == value:
                             return True
 
-    def edit_comparison(self, type_to_change_to):
+    def _edit_comparison(self, type_to_change_to):
         current_user_type = self.get_current_user_type()
         _edit_list = self.get_user_type_edit_data(type_to_change_to)
         for editable_by_single in _edit_list:
@@ -64,11 +60,11 @@ class Checker:
                 return editable_by_single
             return None
 
-    def delete_comparison(self, user_to_delete):
-        type_to_delete = self.get_user_type(user_to_delete)
+    def _delete_comparison(self, user_to_delete: User):
+        type_to_delete = user_to_delete.role
         current_user_type = self.get_current_user_type()
         _delete_list = self.get_user_type_delete_data(type_to_delete)
         for deletable_by_single in _delete_list:
             if deletable_by_single == current_user_type:
-                return deletable_by_single
-            return None
+                return True
+            return False

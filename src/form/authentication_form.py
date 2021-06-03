@@ -1,5 +1,4 @@
-from src.repository.user_repository import UserRepository
-from src.repository.user_repository_interface import UserRepositoryReadInterface
+from src.interfaces.user_repository_interface import UserRepositoryReadInterface
 from src.repository.user_meta_data_repository import UserMetaDataRepository
 from src.repository.user_flag_data_repository import UserFlagDataRepository
 from src.entity.user import User
@@ -14,11 +13,12 @@ date = datetime.date
 class AuthenticationForm:
 
     def __init__(self, user_repo: UserRepositoryReadInterface, meta_data_repo: UserMetaDataRepository,
-                 user_flag_data_repo: UserFlagDataRepository, hasher: HashPassword):
+                 user_flag_data_repo: UserFlagDataRepository, hasher: HashPassword, database):
         self.user_repo = user_repo
         self.hasher = hasher
         self.meta_data_repo = meta_data_repo
         self.user_flag_data_repo = user_flag_data_repo
+        self.database = database
 
         self.choice = input("Do you want to a) login b) register? ")
 
@@ -38,7 +38,7 @@ class AuthenticationForm:
         return user
 
     def register(self):
-        Register(self.user_repo, self.meta_data_repo, self.user_flag_data_repo, self.hasher).run()
+        Register(self.user_repo, self.meta_data_repo, self.user_flag_data_repo, self.hasher, self.database).run()
         return
 
     def run(self):

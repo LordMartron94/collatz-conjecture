@@ -34,7 +34,6 @@ user_flag_data_repo = UserFlagDataRepository(database)
 
 # User repository
 user_repo = UserRepository(database)
-user_repo = UserJsonRepository(database)
 
 # Password hasher
 password_hasher = HashPassword(Config.get_data()['AUTH_SALT'])
@@ -47,7 +46,7 @@ password_hasher = HashPassword(Config.get_data()['AUTH_SALT'])
 
 def login():
     # Authentication form
-    login_form = AuthenticationForm(user_repo, user_meta_data_repo, user_flag_data_repo, password_hasher)
+    login_form = AuthenticationForm(user_repo, user_meta_data_repo, user_flag_data_repo, password_hasher, database)
 
     # Login
     current_user = login_form.run()

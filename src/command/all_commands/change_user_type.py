@@ -3,6 +3,8 @@ import time
 from src.command.rights_comparison import RightsComparison
 from src.repository import user_repository
 from src.command import user_editable_or_deleteable_checker
+from src.logic.user_validator_by_username import UserExistsByUsername
+from src.entity.user import User
 
 Repo = user_repository.UserRepository
 Checker = user_editable_or_deleteable_checker.Checker
@@ -16,12 +18,15 @@ class ChangeUserType:
     def __init__(self, database, logged_in_user):
         self.database = database
         self.logged_in_user = logged_in_user
-        self.find_logged_in_user_type = Repo(self.database).find_type_by_username(self.logged_in_user)
 
-    @staticmethod
-    def ask_user():
-        user = input("What is the name of the user you want to change the type of? ")
-        return user
+    def ask_user(self) -> User:
+        username = input("What is the name of the user you want to change the type of? ")
+        if UserExistsByUsername(self.database).check_by_username(username):
+            return Repo(self.database).get_entity_by_username(username)
+        else:
+            print("Not a valid username! Try again!")
+            wait(1)
+            self.ask_user()
 
     @staticmethod
     def ask_type():
@@ -50,7 +55,8 @@ class ChangeUserType:
         return allowed
 
     def change(self, user_to_change, type_to_change_to):
-        Repo(self.database).update_type_by_user_name(user_to_change, type_to_change_to)
+        user_to_change.role = type_to_change_to
+        Repo(self.database).update(user_to_change)
         return
 
     def run(self):
@@ -59,10 +65,10 @@ class ChangeUserType:
         if self.check_if_allowed_to_use_command():
             if self.check_if_allowed_to_change(user_to_change, type_to_change_to):
                 self.change(user_to_change, type_to_change_to)
-                print("User %s his/her type successfully changed to %s" % (user_to_change, type_to_change_to))
+                print("User %s his/her type successfully changed to %s" % (user_to_change.username, type_to_change_to))
                 return
             if not self.check_if_allowed_to_change(user_to_change, type_to_change_to):
-                print("You don't have permission to do this!")
+                print("You don't have permission to do this! Or user is already the type.")
                 wait(1)
                 return
         if not self.check_if_allowed_to_use_command():

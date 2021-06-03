@@ -1,6 +1,6 @@
 from src.entity.user import User
 from src.storage.database import Database
-from src.repository.user_repository_interface import UserRepositoryReadInterface, UserRepositoryWriteInterface
+from src.interfaces.user_repository_interface import UserRepositoryReadInterface, UserRepositoryWriteInterface
 
 
 class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface):
@@ -45,6 +45,18 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
 
         return self.create_user_entity(result[0])
 
+    def get_user_id_by_username(self, username: str):
+        query = """
+            SELECT id FROM users WHERE username = '%s'
+        """ % username
+
+        result = self.database.fetch_one_in_query(query)
+
+        if not result:
+            return None
+
+        return result
+
     def delete(self, user: User):
         query = """
             DELETE FROM users WHERE id = %s;
@@ -57,10 +69,10 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
     def update(self, user: User):
         sql = """
             UPDATE users
-            SET username='%s', password='%s', role='%s'
-            WHERE id = %i;
+            SET username=%s, password=%s, role=%s
+            WHERE id = %s;
        """
-        args = (user.username, user.password, user.role)
+        args = (user.username, user.password, user.role, user.user_id)
 
         self.database.query(sql, args)
 
