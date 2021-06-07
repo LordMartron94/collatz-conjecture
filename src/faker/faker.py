@@ -57,7 +57,6 @@ class Faker:
 
     def create_user_flag_data(self):
         date_kicked = date.today() + timedelta(days=-3)
-        remove_kick_date = date_kicked + timedelta(days=+30)
         date_banned = date.today() + timedelta(days=7)
         user_flag_data = [
             (False, None, None, None, False, None, None),

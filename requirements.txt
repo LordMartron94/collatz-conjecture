@@ -1,2 +1,5 @@
 mysql-connector-python~=8.0.24
 python-dateutil~=2.8.1
+black~=21.5.b2
+mypy~=0.812
+pylint~=2.8.3

@@ -70,7 +70,11 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
 
     def get_is_user_kicked(self, user: User):
         user_flag_data = self._get_user_flag_data(user)
-        return user_flag_data.isKicked
+        for val in user_flag_data.isKicked:
+            if val == 1:
+                return True
+            else:
+                return False
 
     def get_user_kick_date(self, user: User):
         user_flag_data = self._get_user_flag_data(user)
@@ -86,7 +90,11 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
 
     def get_is_user_banned(self, user: User):
         user_flag_data = self._get_user_flag_data(user)
-        return user_flag_data.isBanned
+        for val in user_flag_data.isBanned:
+            if val == 1:
+                return True
+            else:
+                return False
 
     def get_user_ban_date(self, user: User):
         user_flag_data = self._get_user_flag_data(user)
@@ -167,3 +175,4 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
         user_flag_data = self._get_user_flag_data(user)
         user_flag_data.ban_reason = new_value
         flag_data_repo(self.database).update(user_flag_data)
+

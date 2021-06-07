@@ -35,11 +35,15 @@ class AuthenticationForm:
             print('Incorrect user or password! Try again!')
             return None
 
+        def get_kick_removal_str(user_repo, _user):
+            _kick_remove_date = user_repo.get_user_kick_removal_date(_user)
+            for val in _kick_remove_date:
+                return val
 
-        # todo fix ban_issue
         if self.user_repo.get_is_user_kicked(user):
+            kick_remove_date = get_kick_removal_str(self.user_repo, user)
             print(f"{user.username} you are kicked, and cannot login until: "
-                  f"{self.user_repo.get_user_kick_removal_date(user)}")
+                  f"{kick_remove_date}")
             self.login()
         if self.user_repo.get_is_user_banned(user):
             print(f"{user.username}, you are banned and can't ever login again!")

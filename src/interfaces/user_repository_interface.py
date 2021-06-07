@@ -5,7 +5,6 @@ date = datetime.date
 
 
 class UserRepositoryReadInterface:
-
     def get_all_users(self) -> list:
         pass
 
@@ -41,7 +40,6 @@ class UserRepositoryReadInterface:
 
 
 class UserRepositoryWriteInterface:
-
     def delete(self, user: User):
         pass
 
@@ -51,7 +49,7 @@ class UserRepositoryWriteInterface:
     def create(self, username: str, password: str, role: str) -> User:
         pass
 
-    def set_is_user_kicked(self, user: User, new_value: [bool, None]):
+    def set_is_user_kicked(self, user: User, union: [bool, None]):
         pass
 
     def set_user_kick_date(self, user: User, new_value: [date, None]):
@@ -71,4 +69,3 @@ class UserRepositoryWriteInterface:
 
     def set_user_ban_reason(self, user: User, new_value: [str, None]):
         pass
-

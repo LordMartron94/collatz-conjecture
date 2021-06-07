@@ -11,7 +11,7 @@ class Help:
     def show_available_commands():
         # print("Showing commands")
         text = "Here follows a list of all available commands: " + "\n" + "{help | exit | delete user (del) " \
-                "| change user type (cut) | Check User Data (cud)}"
+                "| change user type (cut) | Check User Data (cud) | kick user (ku) | ban user (bu)}"
         print(text)
         return
 

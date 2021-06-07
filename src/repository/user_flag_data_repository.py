@@ -5,7 +5,6 @@ from datetime import date
 
 
 class UserFlagDataRepository:
-
     def __init__(self, database: Database):
         self.database = database
 
@@ -23,9 +22,12 @@ class UserFlagDataRepository:
         return user_flag_data
 
     def find_entity_by_id(self, user_id: int) -> UserFlagData:
-        query = """
+        query = (
+            """
             SELECT * FROM user_flag_data WHERE userId = %s
-        """ % user_id
+        """
+            % user_id
+        )
 
         result = self.database.read_query(query)
 
@@ -35,9 +37,12 @@ class UserFlagDataRepository:
         return self._create_meta_data(result[0])
 
     def find_data_id_by_id(self, user_id: int):
-        query = """
+        query = (
+            """
             SELECT userId FROM user_flag_data WHERE userId = %s
-        """ % user_id
+        """
+            % user_id
+        )
 
         result = self.database.read_query(query)
 
@@ -59,18 +64,32 @@ class UserFlagDataRepository:
         sql = """
             UPDATE user_flag_data
             SET isKicked=%s, kick_date=%s, remove_kick_date=%s, kick_reason=%s, isBanned=%s, ban_date=%s,
-             ban_reason=%s
+            ban_reason=%s
             WHERE userId = %s;
        """
-        args = (user_flag_data.isKicked, user_flag_data.kick_date, user_flag_data.remove_kick_date,
-                user_flag_data.kick_reason, user_flag_data.isBanned, user_flag_data.ban_date,
-                user_flag_data.ban_reason, user_flag_data.userId)
+        args = (
+            user_flag_data.isKicked,
+            user_flag_data.kick_date,
+            user_flag_data.remove_kick_date,
+            user_flag_data.kick_reason,
+            user_flag_data.isBanned,
+            user_flag_data.ban_date,
+            user_flag_data.ban_reason,
+            user_flag_data.userId,
+        )
 
         self.database.query(sql, args)
 
-    def create(self, isKicked: bool, kick_date: [date, None], remove_kick_date: [date, None],
-                 kick_reason: [str, None], isBanned: bool, ban_date: [date, None], ban_reason: [str, None])\
-            -> UserFlagData:
+    def create(
+        self,
+        isKicked: bool,
+        kick_date: [date, None],
+        remove_kick_date: [date, None],
+        kick_reason: [str, None],
+        isBanned: bool,
+        ban_date: [date, None],
+        ban_reason: [str, None],
+    ) -> UserFlagData:
 
         query = """
             INSERT INTO user_flag_data (isKicked, kick_date, remove_kick_date, kick_reason, 
@@ -78,7 +97,15 @@ class UserFlagDataRepository:
             VALUES ( %s, %s, %s, %s, %s, %s, %s)
         """
 
-        args = (isKicked, kick_date, remove_kick_date, kick_reason, isBanned, ban_date, ban_reason)
+        args = (
+            isKicked,
+            kick_date,
+            remove_kick_date,
+            kick_reason,
+            isBanned,
+            ban_date,
+            ban_reason,
+        )
 
         user_meta_data_id = self.database.query(query, args)
 
@@ -87,4 +114,6 @@ class UserFlagDataRepository:
     @staticmethod
     def _create_meta_data(row: list) -> UserFlagData:
         # print(row)
-        return UserFlagData(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
+        return UserFlagData(
+            row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]
+        )
