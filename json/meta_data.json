@@ -68,6 +68,15 @@
                 "Owner",
                 "Admin"
             ]
+        },
+        {
+            "name":"test",
+            "alternative_name":"",
+            "tooltip":"Using this command, you can test anything.",
+            "rights":[
+                "Owner",
+                "Admin"
+            ]
         }
     ],
     "UserTypes":[

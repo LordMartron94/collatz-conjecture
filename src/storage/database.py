@@ -1,5 +1,4 @@
 class Database:
-
     def __init__(self, connection, db_name: str):
         self.connection = connection
         self.db_name = db_name
@@ -18,13 +17,22 @@ class Database:
 
         return cursor.fetchall()
 
+    def new_query(self, query, args: [str, None]) -> list:
+        cursor = self.connection.cursor()
+        cursor.execute(query, args)
+
+        return cursor.fetchall()
+
     def table_exists(self, table_name) -> bool:
         result = 0
         query = """
         SELECT * FROM information_schema.tables
         WHERE table_schema = '%s'
             AND table_name = '%s'
-        LIMIT 1;""" % (self.db_name, table_name)
+        LIMIT 1;""" % (
+            self.db_name,
+            table_name,
+        )
         old_result = self.read_query(query)
         if not old_result:
             # print("Result = []")

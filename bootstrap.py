@@ -1,14 +1,22 @@
 import time
 
 from src.storage.database import Database
-from src.database.user_table_installer import UserTableInstaller
-from src.database.user_flag_data_installer import UserFlagDataTableInstaller
-from src.database.user_meta_data_installer import UserMetaDataTableInstaller
+from src.database.installers.user_table_installer import UserTableInstaller
+from src.database.installers.user_flag_data_installer import UserFlagDataTableInstaller
+from src.database.installers.user_meta_data_installer import UserMetaDataTableInstaller
+from src.database.installers.collatz_conjecture_main_installer import (
+    CollatzConjectureMainInstaller,
+)
+from src.database.installers.collatz_conjecture_sequence_installer import (
+    CollatzConjectureSequenceInstaller,
+)
+from src.database.installers.collatz_conjecture_junction_installer import (
+    CollatzConjectureJunctionInstaller,
+)
 from src.form.authentication_form import AuthenticationForm
 from src.repository.user_repository import UserRepository
 from src.hash.hash_password import HashPassword
 from config.config import Config
-from src.faker.faker import Faker
 from src.action.console import Console
 from mysql.connector import MySQLConnection
 from src.repository.user_meta_data_repository import UserMetaDataRepository
@@ -25,10 +33,14 @@ connection = MySQLConnection(
 )
 database = Database(connection, config["db_name"])
 
-# Run installer
-UserTableInstaller(database)
-UserMetaDataTableInstaller(database)
-UserFlagDataTableInstaller(database)
+# Run installers
+UserTableInstaller(database).create_table()
+UserMetaDataTableInstaller(database).create_table()
+UserFlagDataTableInstaller(database).create_table()
+
+CollatzConjectureSequenceInstaller(database).create_table()
+CollatzConjectureMainInstaller(database).create_table()
+CollatzConjectureJunctionInstaller(database).create_table()
 
 user_meta_data_repo = UserMetaDataRepository(database)
 user_flag_data_repo = UserFlagDataRepository(database)

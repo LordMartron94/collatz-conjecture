@@ -1,4 +1,4 @@
-from src.database.installer_interface import InstallerInterface
+from src.interfaces.installer_interface import InstallerInterface
 from src.storage.database import Database
 
 

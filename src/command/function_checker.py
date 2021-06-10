@@ -5,6 +5,7 @@ from src.command.all_commands import change_user_type
 from src.command.all_commands import check_user_data
 from src.command.all_commands import kick_user
 from src.command.all_commands import ban_user
+from src.command.all_commands import test
 
 from src.repository.user_repository import UserRepository
 
@@ -44,6 +45,8 @@ class FunctionChecker:
                 self.database,
                 self.logged_in_user,
             ).run()
+        if command.lower() == "test":
+            test.Test(self.database, self.logged_in_user).run()
         else:
             print("Not a valid command! Try again!")
             return
