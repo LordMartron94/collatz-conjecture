@@ -1,7 +1,9 @@
 import time
 
 from src.storage.database import Database
-from src.database.installer import Installer
+from src.database.user_table_installer import UserTableInstaller
+from src.database.user_flag_data_installer import UserFlagDataTableInstaller
+from src.database.user_meta_data_installer import UserMetaDataTableInstaller
 from src.form.authentication_form import AuthenticationForm
 from src.repository.user_repository import UserRepository
 from src.hash.hash_password import HashPassword
@@ -16,18 +18,17 @@ config = Config.get_data()
 
 # Database connection
 connection = MySQLConnection(
-    user=config['db_user'],
-    password=config['db_password'],
-    host=config['db_host'],
-    database=config['db_name']
+    user=config["db_user"],
+    password=config["db_password"],
+    host=config["db_host"],
+    database=config["db_name"],
 )
-database = Database(connection, config['db_name'])
+database = Database(connection, config["db_name"])
 
 # Run installer
-installer = Installer(database)
-installer.create_users_table()
-installer.create_personal_data_table()
-installer.create_user_flag_data_table()
+UserTableInstaller(database)
+UserMetaDataTableInstaller(database)
+UserFlagDataTableInstaller(database)
 
 user_meta_data_repo = UserMetaDataRepository(database)
 user_flag_data_repo = UserFlagDataRepository(database)
@@ -36,7 +37,7 @@ user_flag_data_repo = UserFlagDataRepository(database)
 user_repo = UserRepository(database)
 
 # Password hasher
-password_hasher = HashPassword(Config.get_data()['AUTH_SALT'])
+password_hasher = HashPassword(Config.get_data()["AUTH_SALT"])
 
 # Create fake users
 # Faker(user_repo, user_meta_data_repo, user_flag_data_repo, password_hasher).create_users()
@@ -46,7 +47,9 @@ password_hasher = HashPassword(Config.get_data()['AUTH_SALT'])
 
 def login():
     # Authentication form
-    login_form = AuthenticationForm(user_repo, user_meta_data_repo, user_flag_data_repo, password_hasher, database)
+    login_form = AuthenticationForm(
+        user_repo, user_meta_data_repo, user_flag_data_repo, password_hasher, database
+    )
 
     # Login
     current_user = login_form.run()
