@@ -35,7 +35,8 @@ class KickUser:
         )
 
         self.user_write_repo.set_user_kick_removal_date(user, kick_removal_date)
-        self.user_write_repo.set_user_kick_reason(user, kick_reason)
+
+        return True
 
     @staticmethod
     def _get_user_kick_reason(user):
@@ -44,7 +45,7 @@ class KickUser:
     def _get_increment(self):
         length = input(
             "How long do you want the user to be kicked? a) One week b) Two weeks c) One month, "
-            "or d) One year"
+            "or d) One year "
         )
         if length == "a":
             return 7
@@ -92,7 +93,7 @@ class KickUser:
                 if self._kick_user(
                     user_to_kick, self._get_user_kick_reason(user_to_kick)
                 ):
-                    print(f"user {user_to_kick} successfully kicked!")
+                    print(f"user {user_to_kick.username} successfully kicked!")
                     return
                 else:
                     print("Something went wrong!")

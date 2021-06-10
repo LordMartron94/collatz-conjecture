@@ -4,6 +4,7 @@ from src.command.all_commands import delete_user
 from src.command.all_commands import change_user_type
 from src.command.all_commands import check_user_data
 from src.command.all_commands import kick_user
+from src.command.all_commands import ban_user
 
 from src.repository.user_repository import UserRepository
 
@@ -30,8 +31,19 @@ class FunctionChecker:
             check_user_data.CheckUserData(self.database, self.logged_in_user).run()
             return
         if command.lower() == "kick user" or command.lower() == "ku":
-            kick_user.KickUser(UserRepository(self.database), UserRepository(self.database),
-                               self.database, self.logged_in_user).run()
+            kick_user.KickUser(
+                UserRepository(self.database),
+                UserRepository(self.database),
+                self.database,
+                self.logged_in_user,
+            ).run()
+        if command.lower() == "ban user" or command.lower() == "bu":
+            ban_user.BanUser(
+                UserRepository(self.database),
+                UserRepository(self.database),
+                self.database,
+                self.logged_in_user,
+            ).run()
         else:
             print("Not a valid command! Try again!")
             return

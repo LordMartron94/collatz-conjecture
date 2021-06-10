@@ -1,7 +1,12 @@
-class User:
+from dataclasses import dataclass
 
-    def __init__(self, user_id: int, username: str, password: str, role: str):
-        self.user_id = user_id
-        self.username = username
-        self.password = password
-        self.role = role
+
+@dataclass
+class User:
+    user_id: int
+    username: str
+    password: str
+    role: str
+
+    def __repr__(self):
+        return f"user_id: {self.user_id}, username: {self.username}, password: {self.password}, role: {self.role}"

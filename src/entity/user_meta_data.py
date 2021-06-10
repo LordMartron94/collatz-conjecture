@@ -1,15 +1,17 @@
 from datetime import date
+from dataclasses import dataclass
 
 
+@dataclass
 class UserMetaData:
-    def __init__(self, userId: int, first_name: str, last_name: str, birthday: date, gender: str):
-        self.userId = userId
-        self.first_name = first_name
-        self.last_name = last_name
-        self.birthday = birthday
-        self.gender = gender
+    userId: int
+    first_name: str
+    last_name: str
+    birthday: date
+    gender: str
 
-    def get_age(self, current_date: date):
-        # self.birthday
-        # TODO calculate age
-        return 20
+    def __repr__(self):
+        return (
+            f"userId: {self.userId}, first_name: {self.first_name}, last_name: {self.last_name}, "
+            f"birthday: {self.birthday}, gender: {self.gender}"
+        )

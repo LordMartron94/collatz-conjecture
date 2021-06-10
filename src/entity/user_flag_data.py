@@ -1,14 +1,23 @@
 from datetime import date
+from dataclasses import dataclass
 
 
+@dataclass
 class UserFlagData:
-    def __init__(self, userId: int, isKicked: bool, kick_date: [date, None], remove_kick_date: [date, None],
-                 kick_reason: str, isBanned: bool, ban_date: [date, None], ban_reason: str):
-        self.userId = userId,
-        self.isKicked = isKicked,
-        self.kick_date = kick_date,
-        self.remove_kick_date = remove_kick_date,
-        self.kick_reason = kick_reason,
-        self.isBanned = isBanned,
-        self.ban_date = ban_date,
-        self.ban_reason = ban_reason
+    """Class for storing user flag data in an object."""
+
+    userId: int
+    isKicked: bool
+    kick_date: date
+    remove_kick_date: date
+    kick_reason: str
+    isBanned: bool
+    ban_date: date
+    ban_reason: str
+
+    def __repr__(self):
+        return (
+            f"userId: {self.userId}, isKicked: {self.isKicked}, kick_date: {self.kick_date}, "
+            f"remove_kick_date: {self.remove_kick_date}, kick_reason: {self.kick_reason}, isBanned: {self.isBanned},"
+            f" ban_date: {self.ban_date}, ban_reason: {self.ban_reason}"
+        )

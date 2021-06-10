@@ -1,6 +1,9 @@
 from src.entity.user import User
 from src.storage.database import Database
-from src.interfaces.user_repository_interface import UserRepositoryReadInterface, UserRepositoryWriteInterface
+from src.interfaces.user_repository_interface import (
+    UserRepositoryReadInterface,
+    UserRepositoryWriteInterface,
+)
 
 from src.repository.user_flag_data_repository import UserFlagDataRepository
 
@@ -11,8 +14,7 @@ date = datetime.date
 flag_data_repo = UserFlagDataRepository
 
 
-class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface):
-
+class UserRepository(UserRepositoryReadInterface, UserRepositoryWriteInterface):
     def __init__(self, database: Database):
         self.database = database
 
@@ -30,9 +32,12 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
         return users
 
     def get_data_by_id(self, user_id: int) -> User:
-        query = """
+        query = (
+            """
             SELECT * FROM users WHERE id = %s
-        """ % user_id
+        """
+            % user_id
+        )
 
         result = self.database.read_query(query)
 
@@ -42,9 +47,12 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
         return self._create_user_entity(result[0])
 
     def get_entity_by_username(self, username: str) -> User:
-        query = """
+        query = (
+            """
             SELECT * FROM users WHERE username = '%s'
-        """ % username
+        """
+            % username
+        )
 
         result = self.database.read_query(query)
 
@@ -54,9 +62,12 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
         return self._create_user_entity(result[0])
 
     def get_user_id_by_username(self, username: str):
-        query = """
+        query = (
+            """
             SELECT id FROM users WHERE username = '%s'
-        """ % username
+        """
+            % username
+        )
 
         result = self.database.fetch_one_in_query(query)
 
@@ -70,11 +81,11 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
 
     def get_is_user_kicked(self, user: User):
         user_flag_data = self._get_user_flag_data(user)
-        for val in user_flag_data.isKicked:
-            if val == 1:
-                return True
-            else:
-                return False
+        val = user_flag_data.isKicked
+        if val == 1:
+            return True
+        else:
+            return False
 
     def get_user_kick_date(self, user: User):
         user_flag_data = self._get_user_flag_data(user)
@@ -90,11 +101,11 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
 
     def get_is_user_banned(self, user: User):
         user_flag_data = self._get_user_flag_data(user)
-        for val in user_flag_data.isBanned:
-            if val == 1:
-                return True
-            else:
-                return False
+        val = user_flag_data.isBanned
+        if val == 1:
+            return True
+        else:
+            return False
 
     def get_user_ban_date(self, user: User):
         user_flag_data = self._get_user_flag_data(user)
@@ -175,4 +186,3 @@ class UserRepository (UserRepositoryReadInterface, UserRepositoryWriteInterface)
         user_flag_data = self._get_user_flag_data(user)
         user_flag_data.ban_reason = new_value
         flag_data_repo(self.database).update(user_flag_data)
-

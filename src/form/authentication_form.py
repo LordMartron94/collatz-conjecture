@@ -11,9 +11,14 @@ date = datetime.date
 
 
 class AuthenticationForm:
-
-    def __init__(self, user_repo: UserRepositoryReadInterface, meta_data_repo: UserMetaDataRepository,
-                 user_flag_data_repo: UserFlagDataRepository, hasher: HashPassword, database):
+    def __init__(
+        self,
+        user_repo: UserRepositoryReadInterface,
+        meta_data_repo: UserMetaDataRepository,
+        user_flag_data_repo: UserFlagDataRepository,
+        hasher: HashPassword,
+        database,
+    ):
         self.user_repo = user_repo
         self.hasher = hasher
         self.meta_data_repo = meta_data_repo
@@ -32,18 +37,18 @@ class AuthenticationForm:
         user = self.user_repo.get_entity_by_username(username)
 
         if not user or not self.validate_password(user, password):
-            print('Incorrect user or password! Try again!')
+            print("Incorrect user or password! Try again!")
             return None
 
         def get_kick_removal_str(user_repo, _user):
-            _kick_remove_date = user_repo.get_user_kick_removal_date(_user)
-            for val in _kick_remove_date:
-                return val
+            return user_repo.get_user_kick_removal_date(_user)
 
         if self.user_repo.get_is_user_kicked(user):
             kick_remove_date = get_kick_removal_str(self.user_repo, user)
-            print(f"{user.username} you are kicked, and cannot login until: "
-                  f"{kick_remove_date}")
+            print(
+                f"{user.username} you are kicked, and cannot login until: "
+                f"{kick_remove_date}"
+            )
             self.login()
         if self.user_repo.get_is_user_banned(user):
             print(f"{user.username}, you are banned and can't ever login again!")
@@ -52,16 +57,22 @@ class AuthenticationForm:
         return user
 
     def register(self):
-        Register(self.user_repo, self.meta_data_repo, self.user_flag_data_repo, self.hasher, self.database).run()
+        Register(
+            self.user_repo,
+            self.meta_data_repo,
+            self.user_flag_data_repo,
+            self.hasher,
+            self.database,
+        ).run()
         return
 
     def run(self):
-        if self.choice == 'a':
+        if self.choice == "a":
             user = self.login()
             return user
-        if self.choice == 'b':
+        if self.choice == "b":
             self.register()
             print("You can now log in!")
-        if self.choice != 'a' and self.choice != 'b':
+        if self.choice != "a" and self.choice != "b":
             print("This is not a valid option! Try again!")
             return None

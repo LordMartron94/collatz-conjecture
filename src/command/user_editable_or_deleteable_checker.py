@@ -10,16 +10,23 @@ class Checker:
         self.data = type_repository.TypeRepository().find_all_user_types()
 
     def get_user_type_edit_data(self, type_to_change_to):
-        type_to_change_to_editable_by_list = type_repository.TypeRepository().get_editable_by_type(type_to_change_to)
+        type_to_change_to_editable_by_list = (
+            type_repository.TypeRepository().get_editable_by_type(type_to_change_to)
+        )
         return type_to_change_to_editable_by_list
 
     def get_user_type_delete_data(self, type_to_delete):
-        type_to_deletable_by_list = type_repository.TypeRepository().get_deletable_by_type(type_to_delete)
+        type_to_deletable_by_list = (
+            type_repository.TypeRepository().get_deletable_by_type(type_to_delete)
+        )
         return type_to_deletable_by_list
 
     def get_current_user_type(self):
-        current_user_type = user_repository.UserRepository(self.database).\
-            get_entity_by_username(self.logged_in_user.username).role
+        current_user_type = (
+            user_repository.UserRepository(self.database)
+            .get_entity_by_username(self.logged_in_user.username)
+            .role
+        )
         return current_user_type
 
     def find_all_changeable_by_user_type(self, user_to_change_type):
@@ -27,8 +34,8 @@ class Checker:
         for Usertype in data:
             # pprint(Usertype, sort_dicts=False)
             # print("---------------------------------------------------")
-            if user_to_change_type == Usertype['TypeName']:
-                return Usertype['Changeable By To']
+            if user_to_change_type == Usertype["TypeName"]:
+                return Usertype["Changeable By To"]
         return "Error-message: Usertype not found!"
 
     def check_changeable_by_user_type(self, user_to_change: User, type_to_change_to):
@@ -52,7 +59,7 @@ class Checker:
                         if type_to_change_to == value:
                             return True
 
-    def _edit_comparison(self, type_to_change_to):
+    def edit_comparison(self, type_to_change_to):
         current_user_type = self.get_current_user_type()
         _edit_list = self.get_user_type_edit_data(type_to_change_to)
         for editable_by_single in _edit_list:
@@ -60,7 +67,7 @@ class Checker:
                 return editable_by_single
             return None
 
-    def _delete_comparison(self, user_to_delete: User):
+    def delete_comparison(self, user_to_delete: User):
         type_to_delete = user_to_delete.role
         current_user_type = self.get_current_user_type()
         _delete_list = self.get_user_type_delete_data(type_to_delete)
