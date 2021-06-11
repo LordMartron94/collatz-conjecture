@@ -54,7 +54,7 @@ class CollatzDataRepository:
 
         return numbers
 
-    def _insert_new_sequence(self):
+    def insert_new_sequence(self):
         query = """
         INSERT INTO collatz_sequence_data (_null)
         VALUES (%s);
@@ -66,9 +66,7 @@ class CollatzDataRepository:
 
         return sequence_id
 
-    def _insert_new_junction_entry(
-        self, number: int, sequence_id: int, step_count: int
-    ):
+    def insert_new_junction_entry(self, number: int, sequence_id: int, step_count: int):
         query = """INSERT INTO number_to_sequence (number_id, sequence_id, step_count)
         VALUES (%s, %s, %s)"""
 
@@ -76,29 +74,19 @@ class CollatzDataRepository:
 
         self.database.query(query, args)
 
-    def insert_new_number(self, number: int, reached_loop: bool, steps: list):
-
-        step_count = 0
+    def insert_new_number(
+        self, number: int, calculation_count: int, step_count: int, sequence_id: int
+    ):
         # print(f"original step-count: {step_count}")
 
         query = """
                     INSERT INTO collatz_main_data (number, calculation_count, reached_loop)
-                    VALUES ( %s, %s, %s)
+                    VALUES ( %s, %s, 0)
                 """
 
-        sequence_id = self._insert_new_sequence()
-        calculation_count = len(steps)
-
-        args = (number, calculation_count, reached_loop)
+        args = (number, calculation_count)
 
         self.database.query(query, args)
-
-        # print(f"step-count 2: {step_count} should be equal to step-count 1")
-        self._insert_new_junction_entry(number, sequence_id, step_count)
-        if steps != "[]":
-            for _number in steps:
-                step_count += 1
-                # print(f"step-count 3: {step_count}")
-                self._insert_new_junction_entry(_number, sequence_id, step_count)
+        self.insert_new_junction_entry(number, sequence_id, step_count)
 
         return

@@ -22,22 +22,36 @@ class Solve:
         else:
             return (_number * 3) + 1
 
+    def _check_if_number_exists(self, number):
+        if CollatzDataRepository(self.database).get_number_by_number(number):
+            return True
+        else:
+            return False
+
     # TODO fix this!
     def run(self):
         step_count = 0
         n = int(self.number)
         steps: list = []
+        sequence_id = CollatzDataRepository(self.database).insert_new_sequence()
 
         while n != 4:
             step_count += 1
-            steps.append(n)
             if step_count % 10 == 0:
                 time.sleep(0.5)
             else:
                 pass
             n = self._math(n)
+            steps.append(n)
         else:
             """Number has reached loop"""
-            print("Number has reached loop!")
-            CollatzDataRepository(self.database).insert_new_number(n, True, steps)
-            return
+            # print("Number has reached loop!")
+            if self._check_if_number_exists(self.number):
+                CollatzDataRepository(self.database).insert_new_junction_entry(
+                    self.number, sequence_id, len(steps)
+                )
+            else:
+                CollatzDataRepository(self.database).insert_new_number(
+                    self.number, len(steps), 0, sequence_id
+                )
+        return steps
