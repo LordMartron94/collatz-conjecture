@@ -13,6 +13,7 @@ class Test:
         #     (8, 1, True, [4]),
         #     (16, 2, True, [8, 4]),
         #     (32, 3, True, [16, 8, 4]),
+        #     (64, 4, True, [32, 16, 8, 4]),
         # ]
         #
         # for value in dummy_data:
@@ -21,7 +22,7 @@ class Test:
         #         value[1],  # calculation_count
         #         value[2],  # reached_loop
         #         value[3],  # steps
-        #     )
+        #
 
         return
 

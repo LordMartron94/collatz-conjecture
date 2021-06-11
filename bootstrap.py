@@ -1,16 +1,20 @@
 import time
 
 from src.storage.database import Database
-from src.database.installers.user_table_installer import UserTableInstaller
-from src.database.installers.user_flag_data_installer import UserFlagDataTableInstaller
-from src.database.installers.user_meta_data_installer import UserMetaDataTableInstaller
-from src.database.installers.collatz_conjecture_main_installer import (
+from src.database.installers.User.user_table_installer import UserTableInstaller
+from src.database.installers.User.user_flag_data_installer import (
+    UserFlagDataTableInstaller,
+)
+from src.database.installers.User.user_meta_data_installer import (
+    UserMetaDataTableInstaller,
+)
+from src.database.installers.Math.Collatz.collatz_conjecture_main_installer import (
     CollatzConjectureMainInstaller,
 )
-from src.database.installers.collatz_conjecture_sequence_installer import (
+from src.database.installers.Math.Collatz.collatz_conjecture_sequence_installer import (
     CollatzConjectureSequenceInstaller,
 )
-from src.database.installers.collatz_conjecture_junction_installer import (
+from src.database.installers.Math.Collatz.collatz_conjecture_junction_installer import (
     CollatzConjectureJunctionInstaller,
 )
 from src.form.authentication_form import AuthenticationForm

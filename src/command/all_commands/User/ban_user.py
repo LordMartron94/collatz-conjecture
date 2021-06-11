@@ -4,15 +4,16 @@ from src.interfaces.user_repository_interface import UserRepositoryReadInterface
 from src.entity.user import User
 
 from src.command.rights_comparison import RightsComparison
+from src.interfaces.command_interface import CommandInterface
 
 from src.logic.user_validator_by_username import UserExistsByUsername
 
-from datetime import datetime, timedelta
+from datetime import datetime
 
 date = datetime
 
 
-class BanUser:
+class BanUser(CommandInterface):
     def __init__(
         self,
         user_write_repo: UserRepositoryWriteInterface,
@@ -20,10 +21,9 @@ class BanUser:
         database,
         logged_in_user: User,
     ):
+        super().__init__(database, logged_in_user)
         self.user_write_repo = user_write_repo
         self.user_read_repo = user_read_repo
-        self.logged_in_user = logged_in_user
-        self.database = database
 
     def _ban_user(self, user: User, ban_reason):
         self.user_write_repo.set_is_user_banned(user, True)
@@ -59,8 +59,13 @@ class BanUser:
             else:
                 return False
 
+    def _check_if_allowed(self):
+        # print("Check if allowed called!")
+        correct = RightsComparison(self.logged_in_user, "ban user").check_if_allowed()
+        return correct
+
     def run(self):
-        if RightsComparison(self.logged_in_user, "ban user").check_if_allowed():
+        if self._check_if_allowed():
             user_to_ban = self._get_user_to_ban()
             if self._check_if_user_is_ban_able(user_to_ban):
                 if self._ban_user(user_to_ban, self._get_user_ban_reason(user_to_ban)):

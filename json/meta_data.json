@@ -77,6 +77,28 @@
                 "Owner",
                 "Admin"
             ]
+        },
+        {
+            "name":"get sequence",
+            "alternative_name":"gs",
+            "tooltip":"Using this command, you get the sequence of a number solved in the past.",
+            "rights":[
+                "Owner",
+                "Admin",
+                "Moderator",
+                "User"
+            ]
+        },
+        {
+            "name":"solve specific",
+            "alternative_name":"ss",
+            "tooltip":"Using this command, you can solve a specific number.",
+            "rights":[
+                "Owner",
+                "Admin",
+                "Moderator",
+                "User"
+            ]
         }
     ],
     "UserTypes":[

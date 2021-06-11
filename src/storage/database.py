@@ -47,7 +47,11 @@ class Database:
         # print("There is a result! - Table does exist! ")
         return True
 
-    def fetch_one_in_query(self, query):
+    def fetch_one_in_query(self, query, args: [str, None]):
         cursor = self.connection.cursor()
-        cursor.execute(query)
+
+        if args is not None:
+            cursor.execute(query, args)
+        else:
+            cursor.execute(query)
         return cursor.fetchone()

@@ -1,11 +1,19 @@
 from src.command.all_commands import help
 from src.command.all_commands import exit
-from src.command.all_commands import delete_user
-from src.command.all_commands import change_user_type
-from src.command.all_commands import check_user_data
-from src.command.all_commands import kick_user
-from src.command.all_commands import ban_user
 from src.command.all_commands import test
+
+from src.command.all_commands.User import (
+    change_user_type,
+    delete_user,
+    ban_user,
+    check_user_data,
+    kick_user,
+)
+
+from src.command.all_commands.Math.Collatz import (
+    get_sequence,
+    solve_specific,
+)
 
 from src.repository.user_repository import UserRepository
 
@@ -38,6 +46,7 @@ class FunctionChecker:
                 self.database,
                 self.logged_in_user,
             ).run()
+            return
         if command.lower() == "ban user" or command.lower() == "bu":
             ban_user.BanUser(
                 UserRepository(self.database),
@@ -45,8 +54,18 @@ class FunctionChecker:
                 self.database,
                 self.logged_in_user,
             ).run()
+            return
         if command.lower() == "test":
             test.Test(self.database, self.logged_in_user).run()
+            return
+        if command.lower() == "get sequence" or command.lower() == "gs":
+            get_sequence.GetSequence(self.database, self.logged_in_user).run()
+            return
+        if command.lower() == "solve specific" or command.lower() == "ss":
+            solve_specific.SolveSpecificNumberCommand(
+                self.database, self.logged_in_user
+            ).run()
+            return
         else:
             print("Not a valid command! Try again!")
             return

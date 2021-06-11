@@ -4,7 +4,6 @@ from src.command.function_checker import FunctionChecker
 
 
 class Console:
-
     def __init__(self, database, current_user):
         self.current_user = current_user
         self.database = database
@@ -17,4 +16,3 @@ class Console:
         FunctionChecker(self.database, self.current_user, command_input).run()
         time.sleep(1)
         self.run()
-

@@ -69,7 +69,7 @@ class UserRepository(UserRepositoryReadInterface, UserRepositoryWriteInterface):
             % username
         )
 
-        result = self.database.fetch_one_in_query(query)
+        result = self.database.fetch_one_in_query(query, None)
 
         if not result:
             return None

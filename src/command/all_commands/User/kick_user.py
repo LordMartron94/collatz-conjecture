@@ -4,6 +4,7 @@ from src.interfaces.user_repository_interface import UserRepositoryReadInterface
 from src.entity.user import User
 
 from src.command.rights_comparison import RightsComparison
+from src.interfaces.command_interface import CommandInterface
 
 from src.logic.user_validator_by_username import UserExistsByUsername
 
@@ -12,7 +13,7 @@ from datetime import datetime, timedelta
 date = datetime
 
 
-class KickUser:
+class KickUser(CommandInterface):
     def __init__(
         self,
         user_write_repo: UserRepositoryWriteInterface,
@@ -20,10 +21,9 @@ class KickUser:
         database,
         logged_in_user: User,
     ):
+        super().__init__(database, logged_in_user)
         self.user_write_repo = user_write_repo
         self.user_read_repo = user_read_repo
-        self.logged_in_user = logged_in_user
-        self.database = database
 
     def _kick_user(self, user: User, kick_reason):
         self.user_write_repo.set_is_user_kicked(user, True)
