@@ -31,7 +31,7 @@ class GetSequence(CommandInterface):
             _number
         )
 
-    def _get_sequence_numbers(self, _id):
+    def _get_sequence_numbers(self, _id, number_to_solve: int):
         sequence_numbers_list = CollatzDataRepository(
             self.database
         ).get_numbers_by_sequence(_id)
@@ -40,7 +40,10 @@ class GetSequence(CommandInterface):
 
         for number_tuple in sequence_numbers_list:
             for number in number_tuple:
-                numbers.append(number)
+                if number == number_to_solve:
+                    pass
+                else:
+                    numbers.append(number)
 
         return numbers
 
@@ -48,10 +51,11 @@ class GetSequence(CommandInterface):
         sequence_id_tuple = self._get_sequence_data(_number)
 
         for _id in sequence_id_tuple:
-            numbers = self._get_sequence_numbers(_id)
+            numbers = self._get_sequence_numbers(_id, _number)
             # print(numbers)
+            print(f"{_number}:")
             for number in numbers:
-                print(number, end=f" -> ")
+                print(number)
         print("\nThis was the sequence!")
 
     def run(self):

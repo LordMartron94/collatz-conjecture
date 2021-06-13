@@ -24,19 +24,32 @@ class CollatzDataRepository:
 
         return results
 
-    def get_sequences_number_is_in_by_number(self, number: int):
-        query = """
-            SELECT sequence_id FROM number_to_sequence WHERE number_id = %s;
-        """
+    def get_junction_data_by_number(self, number):
+        query = (
+            """SELECT * FROM number_to_sequence WHERE number_id=%s AND step_count=0"""
+            % number
+        )
 
-        args = (number,)
-        sequence_ids = self.database.new_query(query, args)
+        results = self.database.read_query(query)
 
-        return sequence_ids
+        if not results:
+            return None
+
+        return results
+
+    # def get_sequences_number_is_in_by_number(self, number: int):
+    #     query = """
+    #         SELECT sequence_id FROM number_to_sequence WHERE number_id = %s;
+    #     """
+    #
+    #     args = (number,)
+    #     sequence_ids = self.database.query(query, args=args)
+    #
+    #     return sequence_ids
 
     def get_number_sequence_by_number(self, number: int) -> tuple:
         query = """
-                    SELECT sequence_id FROM number_to_sequence WHERE number_id = %s;
+                    SELECT sequence_id FROM number_to_sequence WHERE number_id = %s AND step_count=0;
                 """
 
         args = (number,)
@@ -44,13 +57,13 @@ class CollatzDataRepository:
 
         return sequence_ids
 
-    def get_numbers_by_sequence(self, sequence_id: int) -> list:
+    def get_numbers_by_sequence(self, sequence_id: int):
         query = """
                     SELECT number_id FROM number_to_sequence WHERE sequence_id = %s;
                 """
 
         args = (sequence_id,)
-        numbers = self.database.new_query(query, args)
+        numbers = self.database.read_query(query, args=args)
 
         return numbers
 
@@ -74,9 +87,7 @@ class CollatzDataRepository:
 
         self.database.query(query, args)
 
-    def insert_new_number(
-        self, number: int, calculation_count: int, step_count: int, sequence_id: int
-    ):
+    def insert_new_number(self, number: int, calculation_count: int):
         # print(f"original step-count: {step_count}")
 
         query = """
@@ -87,6 +98,32 @@ class CollatzDataRepository:
         args = (number, calculation_count)
 
         self.database.query(query, args)
-        self.insert_new_junction_entry(number, sequence_id, step_count)
 
+    def set_calculation_count(self, number: int, calculation_count: int):
+        query = """
+            UPDATE collatz_main_data
+            SET calculation_count=%s
+            WHERE number = %s;
+       """
+
+        args = (calculation_count, number)
+
+        self.database.query(query, args)
         return
+
+    def _check_bool(self, bool_value: bool):
+        if bool_value:
+            return 1
+        if not bool_value:
+            return 0
+
+    def set_reached_loop(self, number, reached_loop: bool):
+        query = """
+                    UPDATE collatz_main_data
+                    SET reached_loop=%s
+                    WHERE number = %s;
+               """
+
+        args = (self._check_bool(reached_loop), number)
+
+        self.database.query(query, args)

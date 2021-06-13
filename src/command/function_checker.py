@@ -13,6 +13,7 @@ from src.command.all_commands.User import (
 from src.command.all_commands.Math.Collatz import (
     get_sequence,
     solve_specific,
+    solve_until,
 )
 
 from src.repository.user_repository import UserRepository
@@ -63,6 +64,11 @@ class FunctionChecker:
             return
         if command.lower() == "solve specific" or command.lower() == "ss":
             solve_specific.SolveSpecificNumberCommand(
+                self.database, self.logged_in_user
+            ).run()
+            return
+        if command.lower() == "solve until specific" or command.lower() == "sus":
+            solve_until.SolveUntilSpecificNumberCommand(
                 self.database, self.logged_in_user
             ).run()
             return

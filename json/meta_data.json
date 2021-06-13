@@ -99,6 +99,17 @@
                 "Moderator",
                 "User"
             ]
+        },
+        {
+            "name":"solve until specific",
+            "alternative_name":"sus",
+            "tooltip":"Using this command, you can solve every number until a specific number.",
+            "rights":[
+                "Owner",
+                "Admin",
+                "Moderator",
+                "User"
+            ]
         }
     ],
     "UserTypes":[

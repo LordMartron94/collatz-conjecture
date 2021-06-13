@@ -3,22 +3,17 @@ class Database:
         self.connection = connection
         self.db_name = db_name
 
-    def query(self, sql, args: [str, None]) -> int:
-        cursor = self.connection.cursor()
+    def query(self, sql, args=None) -> int:
+        cursor = self.connection.cursor(buffered=True)
 
         cursor.execute(sql, args)
         self.connection.commit()
 
         return cursor.lastrowid
 
-    def read_query(self, query) -> list:
+    def read_query(self, query, args=None) -> list:
         cursor = self.connection.cursor()
-        cursor.execute(query)
 
-        return cursor.fetchall()
-
-    def new_query(self, query, args: [str, None]) -> list:
-        cursor = self.connection.cursor()
         cursor.execute(query, args)
 
         return cursor.fetchall()
@@ -47,11 +42,9 @@ class Database:
         # print("There is a result! - Table does exist! ")
         return True
 
-    def fetch_one_in_query(self, query, args: [str, None]):
+    def fetch_one_in_query(self, query, args=None):
         cursor = self.connection.cursor()
 
-        if args is not None:
-            cursor.execute(query, args)
-        else:
-            cursor.execute(query)
+        cursor.execute(query, args)
+
         return cursor.fetchone()

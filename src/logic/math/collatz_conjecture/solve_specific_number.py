@@ -9,8 +9,10 @@ class SolveSpecificNumber:
     def run(self):
         steps_to_solve = Solve(self.database, self.number).run()
         while len(steps_to_solve) > 0:
+            # print(steps_to_solve)
             for step in steps_to_solve:
                 Solve(self.database, step).run()
+                steps_to_solve.remove(step)
         else:
-            print("Number has reached loop!")
+            print("Number has been solved!")
             return
