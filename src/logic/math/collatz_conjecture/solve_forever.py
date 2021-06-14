@@ -49,7 +49,7 @@ class SolveForever:
         num_of_runs = 0
 
         while True:
-            if (num_of_runs % 100) == 0:
+            if (num_of_runs % 1000) == 0:
                 if self._ask_to_quit():
                     return
                 else:
