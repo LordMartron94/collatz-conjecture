@@ -1,5 +1,5 @@
 from src.entity.user import User
-from src.repository.function_meta_data_repository import *
+from src.repository.User.function_meta_data_repository import *
 
 
 class RightsComparison:

@@ -43,8 +43,21 @@ class Database:
         return True
 
     def fetch_one_in_query(self, query, args=None):
-        cursor = self.connection.cursor()
+        cursor = self.connection.cursor(buffered=True)
 
         cursor.execute(query, args)
 
         return cursor.fetchone()
+
+    def get_database_size(self):
+        # TODO fix this
+        query = """
+                    SELECT 
+                    table_schema %s,
+                    SUM(data_length + index_length) 'Size in Bytes',
+                    ROUND((SUM(data_length + index_length) / 1024 / 1024) * 1.049, 2) 'Size in MB'
+                    FROM information_schema.tables 
+                    GROUP BY table_schema;"""
+
+        result = self.read_query(query, self.db_name)
+        return result

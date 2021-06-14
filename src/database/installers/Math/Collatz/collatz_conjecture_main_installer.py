@@ -17,8 +17,8 @@ class CollatzConjectureMainInstaller(InstallerInterface):
             # print("Table does not exist! ")
             query = """
                     CREATE TABLE collatz_main_data (
-                    number int PRIMARY KEY,
-                    calculation_count int,
+                    number BIGINT PRIMARY KEY,
+                    calculation_count BIGINT,
                     reached_loop BOOL DEFAULT 0
                     );
                     """

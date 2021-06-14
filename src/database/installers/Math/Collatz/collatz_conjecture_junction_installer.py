@@ -18,9 +18,9 @@ class CollatzConjectureJunctionInstaller(InstallerInterface):
             query = """
                     CREATE TABLE number_to_sequence (
                     junction_id int PRIMARY KEY AUTO_INCREMENT,
-                    number_id int,
-                    sequence_id int,
-                    step_count int,
+                    number_id BIGINT,
+                    sequence_id BIGINT,
+                    step_count BIGINT,
                     FOREIGN KEY(number_id) REFERENCES collatz_main_data(number),
                     FOREIGN KEY(sequence_id) REFERENCES collatz_sequence_data(sequence_id),
                     CONSTRAINT uc_number_sequence UNIQUE (number_id, sequence_id)

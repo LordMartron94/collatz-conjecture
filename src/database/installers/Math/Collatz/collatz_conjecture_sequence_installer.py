@@ -17,7 +17,7 @@ class CollatzConjectureSequenceInstaller(InstallerInterface):
             # print("Table does not exist! ")
             query = """
                     CREATE TABLE collatz_sequence_data (
-                    sequence_id int PRIMARY KEY AUTO_INCREMENT,
+                    sequence_id BIGINT PRIMARY KEY AUTO_INCREMENT,
                     _null VARCHAR(10)
                     );
                     """

@@ -1,6 +1,4 @@
-from src.command.all_commands import help
-from src.command.all_commands import exit
-from src.command.all_commands import test
+from src.command.all_commands import help, exit, test, get_db_size
 
 from src.command.all_commands.User import (
     change_user_type,
@@ -14,9 +12,11 @@ from src.command.all_commands.Math.Collatz import (
     get_sequence,
     solve_specific,
     solve_until,
+    solve_forever,
+    get_most_steps,
 )
 
-from src.repository.user_repository import UserRepository
+from src.repository.User.user_repository import UserRepository
 
 
 class FunctionChecker:
@@ -71,6 +71,15 @@ class FunctionChecker:
             solve_until.SolveUntilSpecificNumberCommand(
                 self.database, self.logged_in_user
             ).run()
+            return
+        if command.lower() == "solve forever" or command.lower() == "sf":
+            solve_forever.SolveForeverCommand(self.database, self.logged_in_user).run()
+            return
+        if command.lower() == "get most steps" or command.lower() == "gms":
+            get_most_steps.GetMostSteps(self.database, self.logged_in_user).run()
+            return
+        if command.lower() == "get database size" or command.lower() == "gdbs":
+            get_db_size.GetDBSize(self.database, self.logged_in_user).run()
             return
         else:
             print("Not a valid command! Try again!")

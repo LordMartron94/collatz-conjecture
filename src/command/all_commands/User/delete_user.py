@@ -1,9 +1,11 @@
 import time
 
 from src.command.rights_comparison import RightsComparison
-from src.repository import user_repository
-from src.repository import user_meta_data_repository
-from src.repository import user_flag_data_repository
+from src.repository.User import (
+    user_meta_data_repository,
+    user_repository,
+    user_flag_data_repository,
+)
 from src.command.user_editable_or_deleteable_checker import Checker
 from src.entity.user import User
 from src.logic.user_validator_by_username import UserExistsByUsername

@@ -4,7 +4,7 @@ from src.command import user_editable_or_deleteable_checker
 from src.command.rights_comparison import RightsComparison
 from src.interfaces.command_interface import CommandInterface
 
-from src.repository import user_repository
+from src.repository.User import user_repository
 
 from src.logic.user_validator_by_username import UserExistsByUsername
 from src.entity.user import User

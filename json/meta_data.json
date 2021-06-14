@@ -110,6 +110,37 @@
                 "Moderator",
                 "User"
             ]
+        },
+        {
+            "name":"solve forever",
+            "alternative_name":"sf",
+            "tooltip":"Using this command, you can solve every number.",
+            "rights":[
+                "Owner",
+                "Admin",
+                "Moderator",
+                "User"
+            ]
+        },
+        {
+            "name":"get most steps",
+            "alternative_name":"gms",
+            "tooltip":"Using this command, you can check which solved number took the longest to solve.",
+            "rights":[
+                "Owner",
+                "Admin",
+                "Moderator",
+                "User"
+            ]
+        },
+        {
+            "name":"get DataBase size",
+            "alternative_name":"gdbs",
+            "tooltip":"Using this command, you can check the size of the database.",
+            "rights":[
+                "Owner",
+                "Admin"
+            ]
         }
     ],
     "UserTypes":[

@@ -2,7 +2,10 @@ import time
 
 from src.storage.database import Database
 
-from src.repository.collatz_data_repository import CollatzDataRepository
+from src.repository.Math.Collatz.collatz_data_repository import CollatzDataRepository
+
+from src.storage.logs import LogManagement
+
 
 wait = time.sleep
 
@@ -103,4 +106,5 @@ class Solve:
             CollatzDataRepository(self.database).set_reached_loop(self.number, True)
             for step in steps:
                 CollatzDataRepository(self.database).set_reached_loop(step, True)
+        LogManagement().write_to_log(steps, "last solved log")
         return steps

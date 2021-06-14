@@ -1,5 +1,4 @@
 from src.command.rights_comparison import RightsComparison
-from src.repository.collatz_data_repository import CollatzDataRepository
 
 
 class Test:

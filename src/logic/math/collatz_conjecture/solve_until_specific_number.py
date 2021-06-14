@@ -6,9 +6,10 @@ class SolveUntilSpecificNumber:
         self.database = database
         self.number = number
 
+    # TODO: add percentage counter and remove number shower!
     def run(self):
-        for number in range(4, self.number):
-            # Todo add percentage counter
+        for number in range(4, (self.number + 1)):
+            print(f"The current number being solved is: {number}")
             steps_to_solve = Solve(self.database, number).run()
             while len(steps_to_solve) > 0:
                 # print(steps_to_solve)
@@ -17,5 +18,6 @@ class SolveUntilSpecificNumber:
                     steps_to_solve.remove(step)
             else:
                 pass
+
         print(f"Numbers 4 until {self.number} have been solved!")
         return

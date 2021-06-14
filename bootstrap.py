@@ -18,13 +18,13 @@ from src.database.installers.Math.Collatz.collatz_conjecture_junction_installer 
     CollatzConjectureJunctionInstaller,
 )
 from src.form.authentication_form import AuthenticationForm
-from src.repository.user_repository import UserRepository
+from src.repository.User.user_repository import UserRepository
 from src.hash.hash_password import HashPassword
 from config.config import Config
 from src.action.console import Console
 from mysql.connector import MySQLConnection
-from src.repository.user_meta_data_repository import UserMetaDataRepository
-from src.repository.user_flag_data_repository import UserFlagDataRepository
+from src.repository.User.user_meta_data_repository import UserMetaDataRepository
+from src.repository.User.user_flag_data_repository import UserFlagDataRepository
 
 config = Config.get_data()
 

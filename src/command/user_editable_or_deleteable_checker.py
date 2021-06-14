@@ -1,5 +1,4 @@
-from src.repository import type_repository
-from src.repository import user_repository
+from src.repository.User import user_repository, type_repository
 from src.entity.user import User
 
 

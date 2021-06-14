@@ -1,8 +1,10 @@
-from src.repository.collatz_data_repository import CollatzDataRepository
+from src.repository.Math.Collatz.collatz_data_repository import CollatzDataRepository
 
 from src.interfaces.command_interface import CommandInterface
 
 from src.command.rights_comparison import RightsComparison
+
+from src.storage.logs import LogManagement
 
 
 class GetSequence(CommandInterface):
@@ -49,14 +51,16 @@ class GetSequence(CommandInterface):
 
     def _print_data(self, _number):
         sequence_id_tuple = self._get_sequence_data(_number)
+        logging_list: list = [_number]
 
         for _id in sequence_id_tuple:
             numbers = self._get_sequence_numbers(_id, _number)
-            # print(numbers)
             print(f"{_number}:")
             for number in numbers:
                 print(number)
+                logging_list.append(str(number))
         print("\nThis was the sequence!")
+        LogManagement().write_to_log(logging_list, "last get_sequence log")
 
     def run(self):
         if self._check_if_allowed():

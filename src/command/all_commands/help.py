@@ -14,7 +14,8 @@ class Help(CommandInterface):
             + "\n"
             + "{help | exit | delete user (del) "
             "| change user type (cut) | Check User Data (cud) | kick user (ku) | ban user (bu) | get sequence (gs) | "
-            "solve specific (ss)}"
+            "\nsolve specific (ss) | solve until specific (sus) | solve forever (sf) | get most steps (gms) | "
+            "\nget database size (gdbs)}"
         )
         print(text)
         return

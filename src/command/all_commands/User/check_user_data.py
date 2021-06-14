@@ -1,9 +1,9 @@
 from src.command.rights_comparison import RightsComparison
 from src.interfaces.command_interface import CommandInterface
 
-from src.repository.user_repository import UserRepository
-from src.repository.user_meta_data_repository import UserMetaDataRepository
-from src.repository.user_flag_data_repository import UserFlagDataRepository
+from src.repository.User.user_repository import UserRepository
+from src.repository.User.user_meta_data_repository import UserMetaDataRepository
+from src.repository.User.user_flag_data_repository import UserFlagDataRepository
 
 from src.entity.user import User
 

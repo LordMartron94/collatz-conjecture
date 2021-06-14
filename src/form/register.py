@@ -1,6 +1,6 @@
-from src.repository.user_repository import UserRepository
-from src.repository.user_meta_data_repository import UserMetaDataRepository
-from src.repository.user_flag_data_repository import UserFlagDataRepository
+from src.repository.User.user_repository import UserRepository
+from src.repository.User.user_meta_data_repository import UserMetaDataRepository
+from src.repository.User.user_flag_data_repository import UserFlagDataRepository
 from src.hash.hash_password import HashPassword
 from src.file_handling.json import json_storage
 from src.logic.user_validator_by_username import UserExistsByUsername
@@ -12,29 +12,36 @@ storage = json_storage.JsonStorage
 
 
 class Register:
-    def __init__(self, repository: UserRepository, meta_data_repo: UserMetaDataRepository,
-                 user_flag_data_repo: UserFlagDataRepository, hasher: HashPassword, database):
+    def __init__(
+        self,
+        repository: UserRepository,
+        meta_data_repo: UserMetaDataRepository,
+        user_flag_data_repo: UserFlagDataRepository,
+        hasher: HashPassword,
+        database,
+    ):
         self.user_repo = repository
         self.meta_data_repo = meta_data_repo
         self.user_flag_data_repo = user_flag_data_repo
         self.hasher = hasher
-        self.json_directory = 'json'
+        self.json_directory = "json"
         self.database = database
 
     def get_user_id(self, _username):
         return self.user_repo.get_user_id_by_username(_username)
 
     def create_user(self, user_data):
-        user = [(str(user_data[0]), str(user_data[1]), 'User')]
+        user = [(str(user_data[0]), str(user_data[1]), "User")]
         for user in user:
-            self.user_repo.create(
-                user[0],
-                self.hasher.hash(user[1]),
-                user[2]
-            )
+            self.user_repo.create(user[0], self.hasher.hash(user[1]), user[2])
 
     def create_personal_data(self, user_data):
-        user_meta_data = (str(user_data[2]), str(user_data[3]), user_data[4], str(user_data[5]))
+        user_meta_data = (
+            str(user_data[2]),
+            str(user_data[3]),
+            user_data[4],
+            str(user_data[5]),
+        )
 
         _id = self.get_user_id(user_data[0])
 
@@ -45,7 +52,7 @@ class Register:
                 user_meta_data[0],  # First Name
                 user_meta_data[1],  # Last Name
                 user_meta_data[2],  # Birthday
-                user_meta_data[3]  # Gender
+                user_meta_data[3],  # Gender
             )
 
     def create_user_flag_data(self, user_data):
@@ -61,12 +68,17 @@ class Register:
                 flag_data[3],  # kick reason
                 flag_data[4],  # is banned
                 flag_data[5],  # ban date
-                flag_data[6]   # ban reason
+                flag_data[6],  # ban reason
             )
 
     def run(self):
-        _user_data_collection = GetDataForm(self.user_repo, self.meta_data_repo, self.user_flag_data_repo, self.hasher,
-                                            self.database).get_data_form
+        _user_data_collection = GetDataForm(
+            self.user_repo,
+            self.meta_data_repo,
+            self.user_flag_data_repo,
+            self.hasher,
+            self.database,
+        ).get_data_form
 
         _user_data = _user_data_collection()
 
@@ -75,14 +87,24 @@ class Register:
         self.create_user_flag_data(_user_data)
 
 
-class GetDataForm (Register):
-    def __init__(self, repository: UserRepository, meta_data_repo: UserMetaDataRepository,
-                 user_flag_data_repo: UserFlagDataRepository, hasher: HashPassword, database):
+class GetDataForm(Register):
+    def __init__(
+        self,
+        repository: UserRepository,
+        meta_data_repo: UserMetaDataRepository,
+        user_flag_data_repo: UserFlagDataRepository,
+        hasher: HashPassword,
+        database,
+    ):
 
-        super().__init__(repository, meta_data_repo, user_flag_data_repo, hasher, database)
+        super().__init__(
+            repository, meta_data_repo, user_flag_data_repo, hasher, database
+        )
 
     def get_data_form(self):
-        months = storage(self.json_directory).read_json_file_table('months.json', 'Months')
+        months = storage(self.json_directory).read_json_file_table(
+            "months.json", "Months"
+        )
 
         username = input("What will your username be? ")
 
@@ -131,15 +153,17 @@ class GetDataForm (Register):
         birthday = date(year, month, day)
 
         def check_gender():
-            _gender = input("What is your gender? a) Male b) Female c) Don't want to tell ")
-            if _gender == 'a':
-                return 'Male'
-            elif _gender == 'b':
-                return 'Female'
-            elif _gender == 'c':
-                return 'Don\'t want to tell'
+            _gender = input(
+                "What is your gender? a) Male b) Female c) Don't want to tell "
+            )
+            if _gender == "a":
+                return "Male"
+            elif _gender == "b":
+                return "Female"
+            elif _gender == "c":
+                return "Don't want to tell"
             else:
-                print('This is not a valid gender! Try again!')
+                print("This is not a valid gender! Try again!")
                 return check_gender()
 
         gender = check_gender()

@@ -13,7 +13,7 @@ class SolveSpecificNumberCommand(CommandInterface):
         return int(input("What is the number sequence you want to solve? "))
 
     def _check_if_allowed(self):
-        return RightsComparison(self.logged_in_user, "gs")
+        return RightsComparison(self.logged_in_user, "ss")
 
     def run(self):
         if self._check_if_allowed():

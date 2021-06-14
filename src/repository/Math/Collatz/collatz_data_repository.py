@@ -24,6 +24,16 @@ class CollatzDataRepository:
 
         return results
 
+    def get_calculation(self):
+        query = """SELECT * FROM collatz_main_data ORDER BY calculation_count DESC"""
+
+        results = self.database.fetch_one_in_query(query)
+
+        if not results:
+            return None
+
+        return results
+
     def get_junction_data_by_number(self, number):
         query = (
             """SELECT * FROM number_to_sequence WHERE number_id=%s AND step_count=0"""

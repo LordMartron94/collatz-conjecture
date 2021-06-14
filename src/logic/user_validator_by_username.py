@@ -1,9 +1,9 @@
 from src.interfaces.user_exists_interface import UserValidatorInterface
 
-from src.repository.user_repository import UserRepository
+from src.repository.User.user_repository import UserRepository
 
 
-class UserExistsByUsername (UserValidatorInterface):
+class UserExistsByUsername(UserValidatorInterface):
     def __init__(self, database):
         self.database = database
         self.user_repo = UserRepository(self.database)
@@ -13,4 +13,3 @@ class UserExistsByUsername (UserValidatorInterface):
             return True
         if not self.user_repo.get_entity_by_username(username):
             return False
-
