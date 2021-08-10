@@ -137,3 +137,15 @@ class CollatzDataRepository:
         args = (self._check_bool(reached_loop), number)
 
         self.database.query(query, args)
+
+    def check_if_junction_entry_already_exists(self, number: int, step_count: int) -> bool:
+        query = """
+                    SELECT sequence_id FROM number_to_sequence WHERE number_id = %s AND step_count = %s;
+                """
+
+        args = (number, step_count,)
+        result = self.database.fetch_one_in_query(query, args)
+
+        if result:
+            return True
+        return False

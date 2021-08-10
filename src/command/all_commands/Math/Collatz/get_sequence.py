@@ -33,7 +33,7 @@ class GetSequence(CommandInterface):
             _number
         )
 
-    def _get_sequence_numbers(self, _id, number_to_solve: int):
+    def _get_sequence_numbers(self, _id, number_to_find: int):
         sequence_numbers_list = CollatzDataRepository(
             self.database
         ).get_numbers_by_sequence(_id)
@@ -42,7 +42,7 @@ class GetSequence(CommandInterface):
 
         for number_tuple in sequence_numbers_list:
             for number in number_tuple:
-                if number == number_to_solve:
+                if number == number_to_find:
                     pass
                 else:
                     numbers.append(number)

@@ -1,110 +1,157 @@
-import time
+from pprint import pprint
 
-from src.storage.database import Database
+from src.logic.math.collatz_conjecture.helpers.if_solved import CheckIfSolved
+from src.logic.math.collatz_conjecture.helpers.math import EvenStrategy, CollatzMathStrategy, OddStrategy, CollatzMath
+from src.logic.math.collatz_conjecture.helpers.odd_even import OddEven
 
+from src.logic.math.collatz_conjecture.helpers.write_to_db import WriteToDB
 from src.repository.Math.Collatz.collatz_data_repository import CollatzDataRepository
-
-from src.storage.logs import LogManagement
-
-
-wait = time.sleep
 
 
 class Solve:
-    def __init__(self, database: Database, number: int):
+    """A class that handles solving one 'main/root' number."""
+    def __init__(self, database, root_number: int):
         self.database = database
-        self.number = number
+        self._root_number = root_number
 
-    def _check_if_number_is_even_or_odd(self, _number):
-        if (_number % 2) == 0:
-            return "Even"
+        # Initialize the Repositories
+        self.collatz_data_repo = CollatzDataRepository(self.database)
+        self.write_to_db = WriteToDB(self.database)
+
+    @staticmethod
+    def _choose_strategy(number: int) -> CollatzMathStrategy:
+        result = OddEven().run(number)
+        if result == "Even":
+            return EvenStrategy()
+        if result == "Odd":
+            return OddStrategy()
+
+    def _generate_sequence(self) -> [int, None]:
+        if not self.collatz_data_repo.check_if_junction_entry_already_exists(
+            self._root_number,
+            0
+        ):
+            return self.collatz_data_repo.insert_new_sequence()
         else:
-            return "Odd"
+            return None
 
-    def _math(self, _number):
-        if self._check_if_number_is_even_or_odd(_number) == "Even":
-            return int(_number / 2)
-        else:
-            return (_number * 3) + 1
+    def _add_numbers(self, steps: dict):
+        """Generates a new sequence id if the combination doesn't exist yet.
+        And also adds the numbers. This method works correctly as intended."""
+        sequence_id = self._generate_sequence()
 
-    def _check_if_number_exists(self, number):
-        if CollatzDataRepository(self.database).get_number_by_number(number):
-            return True
-        else:
-            return False
+        if sequence_id is not None:
+            for step_count, step in steps.items():
+                self.write_to_db.add_number(
+                    step,
+                    step_count,
+                    sequence_id
+                )
 
-    def _check_calc_data(self, number):
-        data = CollatzDataRepository(self.database).get_number_by_number(number)
-        for value_tuple in data:
-            if value_tuple[1] != 0:
-                return "Already solved"
-            else:
-                return "Not yet solved"
+        return None
 
-    def _check_if_already_solved_as_head(self, number):
-        data = CollatzDataRepository(self.database).get_junction_data_by_number(number)
-        if data:
-            for value_tuple in data:
-                if value_tuple[3] == 0:
-                    return "Already solved"
-                else:
-                    return "Not yet solved"
-        else:
-            return
-
-    def _add_data_to_number(self, _number, _sequence_id, step_count, calculation_count):
-        if self._check_calc_data(_number) == "Already solved":
-            CollatzDataRepository(self.database).insert_new_junction_entry(
-                _number, _sequence_id, step_count
-            )
-        else:
-            CollatzDataRepository(self.database).insert_new_junction_entry(
-                _number, _sequence_id, step_count
-            )
-            CollatzDataRepository(self.database).set_calculation_count(
-                _number, calculation_count
-            )
-
-    def _insert_new_number(self, _number, _sequence_id, step_count, calculation_count):
-        CollatzDataRepository(self.database).insert_new_number(
-            _number, calculation_count
+    def _set_calculation_count(self, steps: dict):
+        # pprint(steps)
+        calculation_count = (len(steps) - 1)
+        self.collatz_data_repo.set_calculation_count(
+            self._root_number,
+            calculation_count
         )
-        CollatzDataRepository(self.database).insert_new_junction_entry(
-            _number, _sequence_id, step_count
-        )
+        return None
 
-    def _add_number(self, _number, _sequence_id, step_count=0, calculation_count=0):
-        if self._check_if_number_exists(_number):
-            self._add_data_to_number(
-                _number, _sequence_id, step_count, calculation_count
-            )
-        else:
-            self._insert_new_number(
-                _number, _sequence_id, step_count, calculation_count
+    def _set_loop_value(self, steps: dict):
+        for step_count, step in steps.items():
+            self.collatz_data_repo.set_reached_loop(
+                step,
+                True
             )
 
-    def run(self):
-        step_count = 0
-        n = int(self.number)
-        steps: list = []
+    @staticmethod
+    def _side_loop(sequence: list, step_count: int, steps: dict, root_number: int) -> dict:
+        for step_tuple in sequence:
+            for step in step_tuple:
+                if step == root_number:
+                    continue
 
-        if self._check_if_already_solved_as_head(self.number) == "Already solved":
-            return steps
+                step_count += 1
+                steps[step_count] = step
 
-        sequence_id = CollatzDataRepository(self.database).insert_new_sequence()
-
-        while n != 4:
-            step_count += 1
-            n = self._math(n)
-            steps.append(n)
-            self._add_number(n, sequence_id, step_count)
-        else:
-            """Number has reached loop"""
-            # print("Number has reached loop!")
-            self._add_number(self.number, sequence_id, calculation_count=len(steps))
-
-            CollatzDataRepository(self.database).set_reached_loop(self.number, True)
-            for step in steps:
-                CollatzDataRepository(self.database).set_reached_loop(step, True)
-        LogManagement().write_to_log(steps, "last solved log")
         return steps
+
+    def _main_loop(self, n, step_count, steps: dict) -> list:
+        """Main loop and side loop both work correct."""
+        while n != 4:
+            if CheckIfSolved(self.database, n).run():
+                step_sequence_id = self.collatz_data_repo.get_number_sequence_by_number(n)[0]
+                step_sequence = self.collatz_data_repo.get_numbers_by_sequence(step_sequence_id)
+
+                steps = self._side_loop(step_sequence, step_count, steps, n)
+
+                break
+
+            step_count += 1
+
+            strategy = self._choose_strategy(n)
+            n = CollatzMath(strategy, n).run()
+            steps[step_count] = n
+
+        else:
+            pass
+
+        result: list = []
+
+        for step_count, step in steps.items():
+            result.append(step)
+
+        return result
+
+    def _edit_result_list(self, result_list: list):
+        """Makes sure numbers are not going to be calculated as a root number again."""
+
+        result = result_list
+        for number in result[:]:
+            if number == self._root_number:
+                result.remove(number)
+
+        for number in result[:]:
+            data = self.collatz_data_repo.check_if_junction_entry_already_exists(
+                number,
+                0
+            )
+            if data:
+                result.remove(number)
+
+        return result_list
+
+    def _end(self, steps: dict):
+        self._add_numbers(steps)
+        self._set_calculation_count(steps)
+        self._set_loop_value(steps)
+
+        return None
+
+    def run(self) -> [list, None]:
+        n: int = self._root_number
+        step_count: int = 0
+
+        steps: dict = {0: n}
+
+        result = self._main_loop(n, step_count, steps)
+
+        result = self._edit_result_list(result)
+
+        # print(steps)  # Steps are correct here. When solving root number. Not when solving number within sequence...
+        # So it goes wrong in either writing to the database, or retrieving the sequence numbers.
+
+        if len(result) > 0:
+            """Returns a list of steps to solve as a root number, if the length of the result list is 
+            bigger than 0."""
+
+            self._end(steps)
+
+            return result
+
+        else:
+            self._end(steps)
+            return None
+
