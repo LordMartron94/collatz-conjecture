@@ -7,7 +7,7 @@ from src.logic.math.collatz_conjecture.helpers.odd_even import OddEven
 
 from src.logic.math.collatz_conjecture.helpers.write_to_db import WriteToDB
 from src.repository.Math.Collatz.collatz_data_repository import CollatzDataRepository
-from src.utils.utils import Utilities
+from src.utils.utils import print_time
 
 
 def junction_entry_exists(repo, n):
@@ -114,24 +114,17 @@ class Solve:
         start = time.time()
         result = result_list
 
-        # print(f"Result v1: {result}")
-
-        for n in result[:]:
-            if junction_entry_exists(self.collatz_data_repo, n):  # write this function
-                result.remove(n)
-
-        # print(f"Result v2: {result}")
-
-        # exit()
-        results = [
+        result = [
             n for n in result
-            if n != junction_entry_exists(self.collatz_data_repo, n)
+            if not (
+                junction_entry_exists(self.collatz_data_repo, n)
+            )
         ]
 
         end = time.time()
-        Utilities.print_time(start, end, "edit the result list")
+        print_time(start, end, "edit the result list")
 
-        return results
+        return result
 
     def _end(self, steps: dict):
         self._add_numbers(steps)

@@ -1,7 +1,7 @@
 import time
 
 from src.logic.math.collatz_conjecture.solve import Solve
-from src.utils.utils import Utilities
+from src.utils.utils import print_time
 
 
 class SolveSpecificNumber:
@@ -27,5 +27,5 @@ class SolveSpecificNumber:
 
         end = time.time()
         print(f"Number {self.number} has been solved!")
-        Utilities().print_time(start, end, f"solve number {self.number}")
+        print_time(start, end, f"solve number {self.number}")
         return

@@ -1,7 +1,7 @@
 import time
 
 from src.storage.database import Database
-from src.utils.utils import Utilities
+from src.utils.utils import print_time
 
 
 class CollatzDataRepository:
@@ -154,6 +154,7 @@ class CollatzDataRepository:
         return False
 
     def check_if_junction_entry_already_exists_by_step(self, number: int, step_id: int) -> bool:
+        # print(number)
         start = time.time()
 
         query = """
@@ -165,7 +166,7 @@ class CollatzDataRepository:
 
         end = time.time()
 
-        Utilities().print_time(start, end, f"execute the query")
+        print_time(start, end, f"execute the query")
 
         if result:
             return True

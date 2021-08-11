@@ -1,7 +1,7 @@
 import time
 
 from src.logic.math.collatz_conjecture.solve import Solve
-from src.utils.utils import Utilities
+from src.utils.utils import print_time
 
 
 class SolveUntilSpecificNumber:
@@ -28,5 +28,5 @@ class SolveUntilSpecificNumber:
 
         end = time.time()
         print(f"Numbers 4 until {self.number} have been solved!")
-        Utilities().print_time(start, end, f"solve numbers 4 until {self.number}")
+        print_time(start, end, f"solve numbers 4 until {self.number}")
         return
