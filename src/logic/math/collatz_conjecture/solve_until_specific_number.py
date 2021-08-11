@@ -1,23 +1,13 @@
 import time
 
 from src.logic.math.collatz_conjecture.solve import Solve
+from src.utils.utils import Utilities
 
 
 class SolveUntilSpecificNumber:
     def __init__(self, database, number: int):
         self.database = database
         self.number = number
-
-    def _print_time(self, start: time.time, end: time.time):
-        calculated_time = round(end - start)
-        metric = "seconds"
-
-        if calculated_time < 1:
-            calculated_time = round((end - start) * 1000)
-            metric = "milliseconds"
-
-        print(f"It took {calculated_time} {metric} to solve numbers 4 until {self.number}")
-        return
 
     def run(self):
         start = time.time()
@@ -38,5 +28,5 @@ class SolveUntilSpecificNumber:
 
         end = time.time()
         print(f"Numbers 4 until {self.number} have been solved!")
-        self._print_time(start, end)
+        Utilities().print_time(start, end, f"solve numbers 4 until {self.number}")
         return

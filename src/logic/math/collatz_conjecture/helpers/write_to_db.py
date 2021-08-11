@@ -5,14 +5,16 @@ class WriteToDB:
     def __init__(self, database):
         self.database = database
 
+        self.repository = CollatzDataRepository(self.database)
+
     def _check_if_number_exists(self, number):
-        if CollatzDataRepository(self.database).get_number_by_number(number):
+        if self.repository.get_number_by_number(number):
             return True
         else:
             return False
 
     def _check_calc_data(self, number):
-        data = CollatzDataRepository(self.database).get_number_by_number(number)
+        data = self.repository.get_number_by_number(number)
         for value_tuple in data:
             if value_tuple[1] != 0:
                 return "Already solved"
@@ -20,11 +22,11 @@ class WriteToDB:
                 return "Not yet solved"
 
     def _insert_new_junction_entry(self, _number, _sequence_id, step_count):
-        if CollatzDataRepository(self.database).check_if_junction_entry_already_exists(_number, step_count):
+        if self.repository.check_if_junction_entry_already_exists_by_sequence(_number, _sequence_id):
             # print("Junction already exists! Damn it!")
             return None
 
-        CollatzDataRepository(self.database).insert_new_junction_entry(
+        self.repository.insert_new_junction_entry(
             _number, _sequence_id, step_count
         )
         return None
@@ -39,7 +41,7 @@ class WriteToDB:
         return None
 
     def _insert_new_number(self, _number, _sequence_id, step_count, calculation_count):
-        CollatzDataRepository(self.database).insert_new_number(
+        self.repository.insert_new_number(
             _number, calculation_count
         )
         self._insert_new_junction_entry(

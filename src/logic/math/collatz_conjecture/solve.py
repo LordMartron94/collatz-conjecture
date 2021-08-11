@@ -1,3 +1,4 @@
+import time
 from pprint import pprint
 
 from src.logic.math.collatz_conjecture.helpers.if_solved import CheckIfSolved
@@ -6,10 +7,21 @@ from src.logic.math.collatz_conjecture.helpers.odd_even import OddEven
 
 from src.logic.math.collatz_conjecture.helpers.write_to_db import WriteToDB
 from src.repository.Math.Collatz.collatz_data_repository import CollatzDataRepository
+from src.utils.utils import Utilities
+
+
+def junction_entry_exists(repo, n):
+    if repo.check_if_junction_entry_already_exists_by_step(
+        n,
+        0
+    ):
+        return True
+    return False
 
 
 class Solve:
     """A class that handles solving one 'main/root' number."""
+
     def __init__(self, database, root_number: int):
         self.database = database
         self._root_number = root_number
@@ -26,19 +38,10 @@ class Solve:
         if result == "Odd":
             return OddStrategy()
 
-    def _generate_sequence(self) -> [int, None]:
-        if not self.collatz_data_repo.check_if_junction_entry_already_exists(
-            self._root_number,
-            0
-        ):
-            return self.collatz_data_repo.insert_new_sequence()
-        else:
-            return None
-
     def _add_numbers(self, steps: dict):
         """Generates a new sequence id if the combination doesn't exist yet.
         And also adds the numbers. This method works correctly as intended."""
-        sequence_id = self._generate_sequence()
+        sequence_id = self.collatz_data_repo.generate_sequence(self._root_number)
 
         if sequence_id is not None:
             for step_count, step in steps.items():
@@ -105,23 +108,30 @@ class Solve:
 
         return result
 
-    def _edit_result_list(self, result_list: list):
+    def _edit_result_list(self, result_list: list) -> list:
         """Makes sure numbers are not going to be calculated as a root number again."""
 
+        start = time.time()
         result = result_list
-        for number in result[:]:
-            if number == self._root_number:
-                result.remove(number)
 
-        for number in result[:]:
-            data = self.collatz_data_repo.check_if_junction_entry_already_exists(
-                number,
-                0
-            )
-            if data:
-                result.remove(number)
+        # print(f"Result v1: {result}")
 
-        return result_list
+        for n in result[:]:
+            if junction_entry_exists(self.collatz_data_repo, n):  # write this function
+                result.remove(n)
+
+        # print(f"Result v2: {result}")
+
+        # exit()
+        results = [
+            n for n in result
+            if n != junction_entry_exists(self.collatz_data_repo, n)
+        ]
+
+        end = time.time()
+        Utilities.print_time(start, end, "edit the result list")
+
+        return results
 
     def _end(self, steps: dict):
         self._add_numbers(steps)

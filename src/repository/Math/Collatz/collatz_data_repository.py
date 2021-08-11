@@ -1,4 +1,7 @@
+import time
+
 from src.storage.database import Database
+from src.utils.utils import Utilities
 
 
 class CollatzDataRepository:
@@ -138,14 +141,41 @@ class CollatzDataRepository:
 
         self.database.query(query, args)
 
-    def check_if_junction_entry_already_exists(self, number: int, step_count: int) -> bool:
+    def check_if_junction_entry_already_exists_by_sequence(self, number: int, sequence_id: int) -> bool:
         query = """
-                    SELECT sequence_id FROM number_to_sequence WHERE number_id = %s AND step_count = %s;
+                    SELECT sequence_id FROM number_to_sequence WHERE number_id = %s AND sequence_id = %s;
                 """
 
-        args = (number, step_count,)
+        args = (number, sequence_id,)
         result = self.database.fetch_one_in_query(query, args)
 
         if result:
             return True
         return False
+
+    def check_if_junction_entry_already_exists_by_step(self, number: int, step_id: int) -> bool:
+        start = time.time()
+
+        query = """
+                    SELECT sequence_id FROM number_to_sequence WHERE number_id = %s AND step_count = %s;
+                """
+
+        args = (number, step_id,)
+        result = self.database.fetch_one_in_query(query, args)
+
+        end = time.time()
+
+        Utilities().print_time(start, end, f"execute the query")
+
+        if result:
+            return True
+        return False
+
+    def generate_sequence(self, number) -> [int, None]:
+        if not self.check_if_junction_entry_already_exists_by_step(
+            number,
+            0
+        ):
+            return self.insert_new_sequence()
+        else:
+            return None

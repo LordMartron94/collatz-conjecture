@@ -1,23 +1,13 @@
 import time
 
 from src.logic.math.collatz_conjecture.solve import Solve
+from src.utils.utils import Utilities
 
 
 class SolveSpecificNumber:
     def __init__(self, database, number: int):
         self.database = database
         self.number = number
-
-    def _print_time(self, start: time.time, end: time.time):
-        calculated_time = round(end - start)
-        metric = "seconds"
-
-        if calculated_time < 1:
-            calculated_time = round((end - start) * 1000)
-            metric = "milliseconds"
-
-        print(f"It took {calculated_time} {metric} to solve {self.number}")
-        return
 
     def run(self):
         start = time.time()
@@ -37,5 +27,5 @@ class SolveSpecificNumber:
 
         end = time.time()
         print(f"Number {self.number} has been solved!")
-        self._print_time(start, end)
+        Utilities().print_time(start, end, f"solve number {self.number}")
         return
